@@ -122,7 +122,7 @@ $endtable
 **Output**
 | Name | ID | Favourite Colour |
 |---|---|---|
-Rafael | 1234 | Blue
-Bob | 1235 | Red
-Nigel | 6543 | Purple
-Tina | 2112 | Yellow
+| Rafael | 1234 | Blue |
+| Bob | 1235 | Red |
+| Nigel | 6543 | Purple |
+| Tina | 2112 | Yellow |
