@@ -1,10 +1,11 @@
 # Rafael's Notetaking Document Format Specifications
-This document is intended to explain the syntax of RANDF files. There are two
-types of syntax: preprocessor commands and styling commands. Preprocessor 
-commands set the overall styling and appearance of the document. All 
-preprocessor commands are prefaced with `.pp`. Styling commands modify the 
-appearance of the lines of the docuemnt. They are prefaced with various 
-symbols.
+This document is intended to explain the syntax of RANDF files. There are three
+types of syntax: preprocessor commands, insert commands, and styling commands. 
+Preprocessor commands set the overall styling and appearance of the document. 
+All preprocessor commands are prefaced with `.pp`. Insert commands insert 
+styling elements into the document. All insert commands are prefaced with `$`. 
+Styling commands modify the appearance of the lines of the docuemnt. They are 
+prefaced with various symbols.
 
 ## Preprocessor Commands
 All preprocssor commands are prefaced with `.pp`
@@ -100,3 +101,28 @@ These commands insert styling into the final document.
 | $wi *URL* | Inserts an image found on the web from the given URL |
 | $li *FILENAME* | Inserts an image found at the given filepath |
 
+<hr>
+
+## Table Formatting
+To insert a table into a RANDF document, use the following syntax:
+- To define the header of the table, use `$table Header Item 1; Header Item 2; ...`
+- To add an item to the table, use `- Item 1 Col A; Item 1 Col B; ...`
+- To end a table, use `$endtable`
+
+**Syntax Example**
+```
+$table Name; ID; Favourite Colour
+- Rafael; 1234; Blue
+- Bob; 1235; Red
+- Nigel; 6543; Purple
+- Tina; 2112; Yellow
+$endtable
+```
+
+**Output**
+| Name | ID | Favourite Colour |
+|---|---|---|
+Rafael | 1234 | Blue
+Bob | 1235 | Red
+Nigel | 6543 | Purple
+Tina | 2112 | Yellow
