@@ -120,6 +120,7 @@ $endtable
 ```
 
 **Output**
+
 | Name | ID | Favourite Colour |
 |---|---|---|
 | Rafael | 1234 | Blue |
