@@ -1,3 +1,5 @@
+import randf_styling as sty
+
 from yattag import Doc, indent
 from xhtml2pdf import pisa
 from datetime import datetime
@@ -22,26 +24,11 @@ def generateHtmlHeader(title: str) -> str:
     return (indent(doc.getvalue()))
 
 
-def convertHtmlToPdf(raw_html: str, raw_css: str) -> bool:
-    mycss = """
-    body {
-        font-family: "Times New Roman", Times, serif;
-        display: block;
-        margin: 8px;
-    }
-    h1 {
-        display: block;
-        font-size: 2em;
-        margin-top: 0.67em;
-        margin-bottom: 0.67em;
-        margin-left: 0;
-        margin-right: 0;
-        font-weight: bold;
-    }
-    """
-
+def convertHtmlToPdf(raw_html: str, style: sty.Styler) -> bool:
     result_file = open("out.pdf", "w+b")
-    status = pisa.CreatePDF(raw_html, dest=result_file, default_css=mycss)
+    status = pisa.CreatePDF(raw_html, dest=result_file, default_css=style.theme, debug=1)
     result_file.close()
     return status
 
+def myfunc():
+    pass
