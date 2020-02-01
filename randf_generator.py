@@ -36,8 +36,8 @@ def insertParagraphIntoHtml(html: str, p_text: str) -> str:
     return indent(upper)
 
 
-def convertHtmlToPdf(raw_html: str, style: sty.Styler) -> bool:
-    result_file = open("out.pdf", "w+b")
+def convertHtmlToPdf(raw_html: str, style: sty.Styler, out_file: str) -> bool:
+    result_file = open(out_file, "w+b")
     status = pisa.CreatePDF(raw_html, dest=result_file, default_css=style.theme, debug=1)
     result_file.close()
     return status

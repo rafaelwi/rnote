@@ -8,12 +8,15 @@ import randf_styling as sty
 import argparse
 import sys
 import os
+import time
 from xhtml2pdf import pisa
 
 ### Main Program ###
+start_time = time.time()
 arg_parser = argparse.ArgumentParser()
 cliargs.addArgs(arg_parser)
 args = arg_parser.parse_args()
+out_file = 'out.pdf'
 
 # Get the cl args
 if args.input:
@@ -24,6 +27,9 @@ else:
 
 if args.output:
     print("Output file: " + args.output)
+    out_file = args.output
+else:
+    print("[WARN] No output document given, defaulting to 'out.pdf'")
 
 # Check if the input file exists
 if (os.path.exists(args.input) == False):
@@ -44,6 +50,7 @@ f.write(raw_html)
 f.close()
 
 # Write to PDF
-gen.convertHtmlToPdf(raw_html, style)
-
+gen.convertHtmlToPdf(raw_html, style, out_file)
+print("[RANDF] File {} successfully converted to PDF {}".format(args.input, out_file))
+print("[RANDF] Process took {:.4f} seconds".format(time.time() - start_time))
 ### End of main program ###
