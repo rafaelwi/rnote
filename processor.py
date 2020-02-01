@@ -1,9 +1,11 @@
 # RANDF Processor: Takes a raw file and converts it to a compiled document.
 
-import argparse
 import randf_cliargs as cliargs
 import randf_generator as gen
 import randf_parser as parser
+import randf_styling as sty
+
+import argparse
 import sys
 import os
 from xhtml2pdf import pisa
@@ -30,13 +32,16 @@ if (os.path.exists(args.input) == False):
 
 # Read the file, then parse it
 doc = [line.rstrip('\n') for line in open(args.input)]
-parser.parseRandfDoc(doc)
+style = sty.Styler()
+parser.parseRandfDoc(doc, style)
 
+# Generate the middle-man HTML file that will be converted to PDF
 raw_html = gen.generateHtmlHeader("Title of my document")
+f = open("a.html", "w")
+f.write(raw_html)
+f.close()
 
-# Write to pdf
-gen.convertHtmlToPdf(raw_html, None)
+# Write to PDF
+gen.convertHtmlToPdf(raw_html, style)
 
 ### End of main program ###
-
-
