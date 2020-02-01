@@ -1,0 +1,28 @@
+@page {
+    /* Note: the best size for the background images with letter size paper is 
+       1235 x 1600. I don't know why but with that sizing there are no issues 
+       with extra whitespace on the page. */
+    background-image: url('themes/dark.jpg');
+    size: letter;
+
+    @frame {
+        margin: 1in;
+    }
+}
+
+body {
+    font-family: "Times New Roman", Times, serif;
+    display: block;
+    margin: 8px;
+    color: #fff;
+}
+
+h1 {
+    display: block;
+    font-size: 2em;
+    margin-top: 0.67em;
+    margin-bottom: 0.67em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}
