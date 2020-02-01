@@ -1,6 +1,7 @@
+import randf_styling as sty
 import re
 
-def parseRandfDoc(doc: list):
+def parseRandfDoc(doc: list, style: sty.Styler):
     line_no = 0
 
     for l in doc:
@@ -11,7 +12,7 @@ def parseRandfDoc(doc: list):
             print("Encountered a comment or blank line, skipping")
             continue
         if l.startswith('.pp'):
-            parsePpCommand(l, line_no)
+            parsePpCommand(l, line_no, style)
         elif l.startswith('$'):
             parseInsCommand(l, line_no)
         elif l.startswith('# '):
@@ -28,13 +29,14 @@ def parseRandfDoc(doc: list):
             print("[PARSER_ERR] Error on or around line {}, could not determine formatting on the following line:\n  >> {}".format(line_no, l))
         
 
-def parsePpCommand(l: str, line_no: int):
+def parsePpCommand(l: str, line_no: int, style: sty.Styler):
     # Remove the .pp part of the string, then split it into a list
     l = re.sub('.pp *', '', l)
     cmd = l.split()
 
     if cmd[0] == 'theme':
-        print('set theme')
+        print('setting theme')
+        style.theme = cmd[1]
     elif cmd[0] == 'margin':
         print('set margin')
     elif cmd[0] == 'size':
