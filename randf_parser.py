@@ -1,7 +1,8 @@
 import randf_styling as sty
+import randf_generator as gen
 import re
 
-def parseRandfDoc(doc: list, style: sty.Styler):
+def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
     line_no = 0
 
     for l in doc:
@@ -25,8 +26,10 @@ def parseRandfDoc(doc: list, style: sty.Styler):
             print("parsing bullet")
         elif l.startswith('= '):
             print("parsing paragraph")  
+            raw_html = parseParagraph(l, line_no, raw_html)
         else:
             print("[PARSER_ERR] Error on or around line {}, could not determine formatting on the following line:\n  >> {}".format(line_no, l))
+    return raw_html
         
 
 def parsePpCommand(l: str, line_no: int, style: sty.Styler):
@@ -71,3 +74,10 @@ def parseInsCommand(l: str, line_no: int):
         print('table')
     else:
         print("[PARSER_ERR] Error on or around line {}, cound not determine insert command '${}'. Skipping this command.".format(line_no, first))
+
+
+def parseParagraph(l: str, line_no: int, raw_html: str) -> str:
+    # Remove the = part of the string, then split it into a list
+    l = re.sub('= *', '', l)
+    raw_html = gen.insertParagraphIntoHtml(raw_html, l)
+    return raw_html

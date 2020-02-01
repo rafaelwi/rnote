@@ -30,13 +30,15 @@ if (os.path.exists(args.input) == False):
     print("[ERR!] Input file does not exist, exiting...")
     sys.exit(-2)
 
+# Generate the middle-man HTML file that will be converted to PDF
+raw_html = gen.generateHtmlHeader()
+
 # Read the file, then parse it
 doc = [line.rstrip('\n') for line in open(args.input)]
 style = sty.Styler()
-parser.parseRandfDoc(doc, style)
+raw_html = parser.parseRandfDoc(doc, style, raw_html)
 
-# Generate the middle-man HTML file that will be converted to PDF
-raw_html = gen.generateHtmlHeader("Title of my document")
+# Write the html to a temp file
 f = open("a.html", "w")
 f.write(raw_html)
 f.close()
