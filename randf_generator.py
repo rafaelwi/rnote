@@ -19,13 +19,6 @@ def generateHtmlHeader() -> str:
             pass
     return (indent(doc.getvalue()))
 
-
-def insertParagraphIntoHtml(html: str, p_text: str) -> str:
-    return insertElementIntoHtml(html, p_text, 'p')
-
-def insertDocTitleIntoHtml(html: str, t_text: str) -> str:
-    return insertElementIntoHtml(html, t_text, 'h1')
-
 def insertElementIntoHtml(html: str, the_text: str, element: str) -> str:
     upper = html.split('</body>', 1)[0]
     lower = html.split('</body>', 1)[1]

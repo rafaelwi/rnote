@@ -17,8 +17,7 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
         elif l.startswith('$'):
             parseInsCommand(l, line_no)
         elif l.startswith('# '):
-            print("parsing title")
-            raw_html = parseDocTitle(l, line_no, raw_html)
+            raw_html = parseHtmlElement(l, line_no, raw_html, '# *', 'h1')
         elif l.startswith('@ '):
             print("parsing bytag")
         elif l.startswith('! '):
@@ -27,7 +26,7 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
             print("parsing bullet")
         elif l.startswith('= '):
             print("parsing paragraph")  
-            raw_html = parseParagraph(l, line_no, raw_html)
+            raw_html = parseHtmlElement(l, line_no, raw_html, '= *', 'p')
         else:
             print("[PARSER_ERR] Error on or around line {}, could not determine formatting on the following line:\n  >> {}".format(line_no, l))
     return raw_html
@@ -76,15 +75,9 @@ def parseInsCommand(l: str, line_no: int):
     else:
         print("[PARSER_ERR] Error on or around line {}, cound not determine insert command '${}'. Skipping this command.".format(line_no, first))
 
-
-def parseParagraph(l: str, line_no: int, raw_html: str) -> str:
-    # Remove the = part of the string, then split it into a list
-    l = re.sub('= *', '', l)
-    raw_html = gen.insertParagraphIntoHtml(raw_html, l)
+def parseHtmlElement(l: str, line_no: int, raw_html: str, pattern: str, 
+    element: str) -> str:
+    l = re.sub(pattern, '', l)
+    raw_html = gen.insertElementIntoHtml(raw_html, l, element)
     return raw_html
 
-def parseDocTitle(l: str, line_no: int, raw_html: str) -> str:
-    # Remove the = part of the string, then split it into a list
-    l = re.sub('# *', '', l)
-    raw_html = gen.insertDocTitleIntoHtml(raw_html, l)
-    return raw_html
