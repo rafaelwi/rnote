@@ -18,6 +18,7 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
             parseInsCommand(l, line_no)
         elif l.startswith('# '):
             print("parsing title")
+            raw_html = parseDocTitle(l, line_no, raw_html)
         elif l.startswith('@ '):
             print("parsing bytag")
         elif l.startswith('! '):
@@ -80,4 +81,10 @@ def parseParagraph(l: str, line_no: int, raw_html: str) -> str:
     # Remove the = part of the string, then split it into a list
     l = re.sub('= *', '', l)
     raw_html = gen.insertParagraphIntoHtml(raw_html, l)
+    return raw_html
+
+def parseDocTitle(l: str, line_no: int, raw_html: str) -> str:
+    # Remove the = part of the string, then split it into a list
+    l = re.sub('# *', '', l)
+    raw_html = gen.insertDocTitleIntoHtml(raw_html, l)
     return raw_html
