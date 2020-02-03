@@ -13,7 +13,7 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
             print("Encountered a comment or blank line, skipping")
             continue
         if l.startswith('.pp'):
-            parsePpCommand(l, line_no, style)
+            raw_html = parsePpCommand(l, line_no, style, raw_html)
         elif l.startswith('$'):
             parseInsCommand(l, line_no)
         elif l.startswith('# '):
@@ -31,7 +31,7 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
     return raw_html
         
 
-def parsePpCommand(l: str, line_no: int, style: sty.Styler):
+def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> str:
     # Remove the .pp part of the string, then split it into a list
     l = re.sub('.pp *', '', l)
     cmd = l.split()
@@ -49,11 +49,13 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler):
         print('set pgnum')
     elif cmd[0] == 'title':
         print('set title')
+        raw_html = gen.insertDocTitleIntoHtml(raw_html, re.sub('^title?', '', l))
     elif cmd[0] == 'template' or cmd[0] == 'temp' or cmd[0] == 'templ8':
         print('set template')
     else:
         print("[PARSER_ERR] Error on or around line {}, could not determine preprocessor command '{}'. Skipping this command.".format(line_no, cmd[0]))
-        return
+    
+    return raw_html
 
 def parseInsCommand(l: str, line_no: int):
     # Remove the $ part of the string, then split it into  a list

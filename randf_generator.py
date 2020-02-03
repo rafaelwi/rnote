@@ -30,6 +30,12 @@ def insertElementIntoHtml(html: str, the_text: str, element: str) -> str:
     upper += doc.getvalue() + "</body>" + lower
     return indent(upper)
 
+def insertDocTitleIntoHtml(html: str, the_title: str) -> str:
+    upper = html.split('</title>', 1)[0]
+    lower = html.split('</title>', 1)[1]
+    upper += the_title + '</title>' + lower
+    return indent(upper)
+
 
 def convertHtmlToPdf(raw_html: str, style: sty.Styler, out_file: str) -> bool:
     result_file = open(out_file, "w+b")
