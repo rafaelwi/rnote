@@ -21,23 +21,18 @@ def generateHtmlHeader() -> str:
 
 
 def insertParagraphIntoHtml(html: str, p_text: str) -> str:
-    upper = html.split('</body>', 1)[0]
-    lower = html.split('</body>', 1)[1]
-    doc, tag, text, line = Doc().ttl()
-
-    with tag('p'):
-        text(p_text)
-    
-    upper += doc.getvalue() + "</body>" + lower
-    return indent(upper)
+    return insertElementIntoHtml(html, p_text, 'p')
 
 def insertDocTitleIntoHtml(html: str, t_text: str) -> str:
+    return insertElementIntoHtml(html, t_text, 'h1')
+
+def insertElementIntoHtml(html: str, the_text: str, element: str) -> str:
     upper = html.split('</body>', 1)[0]
     lower = html.split('</body>', 1)[1]
     doc, tag, text, line = Doc().ttl()
 
-    with tag('h1'):
-        text(t_text)
+    with tag(element):
+        text(the_text)
     
     upper += doc.getvalue() + "</body>" + lower
     return indent(upper)
