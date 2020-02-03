@@ -2,6 +2,8 @@ import randf_styling as sty
 import randf_generator as gen
 import re
 
+from datetime import date
+
 def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
     line_no = 0
 
@@ -37,7 +39,6 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
     cmd = l.split()
 
     if cmd[0] == 'theme':
-        print('setting theme')
         style.theme = cmd[1]
     elif cmd[0] == 'margin':
         print('set margin')
@@ -48,7 +49,6 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
     elif cmd[0] == 'pgnum':
         print('set pgnum')
     elif cmd[0] == 'title':
-        print('set title')
         raw_html = gen.insertDocTitleIntoHtml(raw_html, re.sub('^title?', '', l))
     elif cmd[0] == 'template' or cmd[0] == 'temp' or cmd[0] == 'templ8':
         print('set template')
@@ -79,6 +79,11 @@ def parseInsCommand(l: str, line_no: int):
 def parseHtmlElement(l: str, line_no: int, raw_html: str, pattern: str, 
     element: str) -> str:
     l = re.sub(pattern, '', l)
+
+    # Before adding the line, see if there is anything that needs to be parsed
+    # by the insert command thing
+    l = re.sub('\$date', str(date.today()), l)
+
     raw_html = gen.insertElementIntoHtml(raw_html, l, element)
     return raw_html
 
