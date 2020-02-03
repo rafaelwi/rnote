@@ -19,13 +19,12 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
         elif l.startswith('# '):
             raw_html = parseHtmlElement(l, line_no, raw_html, '# *', 'h1')
         elif l.startswith('@ '):
-            print("parsing bytag")
+            raw_html = parseHtmlElement(l, line_no, raw_html, '@ *', 'h2')
         elif l.startswith('! '):
-            print("parsing header")
+            raw_html = parseHtmlElement(l, line_no, raw_html, '! *', 'h3')
         elif l.startswith('- '):
             print("parsing bullet")
         elif l.startswith('= '):
-            print("parsing paragraph")  
             raw_html = parseHtmlElement(l, line_no, raw_html, '= *', 'p')
         else:
             print("[PARSER_ERR] Error on or around line {}, could not determine formatting on the following line:\n  >> {}".format(line_no, l))
