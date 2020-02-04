@@ -17,7 +17,7 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
         if l.startswith('.pp'):
             raw_html = parsePpCommand(l, line_no, style, raw_html)
         elif l.startswith('$'):
-            parseInsCommand(l, line_no)
+            raw_html = parseInsCommand(l, line_no, raw_html)
         elif l.startswith('# '):
             raw_html = parseHtmlElement(l, line_no, raw_html, '# *', 'h1')
         elif l.startswith('@ '):
@@ -57,7 +57,7 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
     
     return raw_html
 
-def parseInsCommand(l: str, line_no: int):
+def parseInsCommand(l: str, line_no: int, raw_html: str) -> str:
     # Remove the $ part of the string, then split it into  a list
     l = re.sub('\$', '', l)
     cmd = l.split()
@@ -65,16 +65,18 @@ def parseInsCommand(l: str, line_no: int):
 
     if first == 'br':
         print('line break')
+        raw_html = gen.insertElementIntoHtml(raw_html, '', 'br')
     elif first == 'date':
-        print('date')
-    elif first == 'wi':
+        raw_html = gen.insertElementIntoHtml(raw_html, str(date.today()), 'p')
+    elif (first == 'wi' or first == 'li') and (len(cmd) >= 2):
         print('web image')
-    elif first == 'li':
-        print('local image')
+        raw_html = gen.insertImageIntoHtml(raw_html, cmd[1])
     elif first == 'table':
         print('table')
     else:
         print("[PARSER_ERR] Error on or around line {}, cound not determine insert command '${}'. Skipping this command.".format(line_no, first))
+    
+    return raw_html
 
 def parseHtmlElement(l: str, line_no: int, raw_html: str, pattern: str, 
     element: str) -> str:

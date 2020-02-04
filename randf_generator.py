@@ -36,6 +36,16 @@ def insertDocTitleIntoHtml(html: str, the_title: str) -> str:
     upper += the_title + '</title>' + lower
     return indent(upper)
 
+def insertImageIntoHtml(html: str, img: str) -> str:
+    upper = html.split('</body>', 1)[0]
+    lower = html.split('</body>', 1)[1]
+    doc, tag, text, line = Doc().ttl()
+
+    doc.stag('img', src=img)
+
+    upper += doc.getvalue() + '</body>' + lower
+    return indent(upper)
+
 
 def convertHtmlToPdf(raw_html: str, style: sty.Styler, out_file: str) -> bool:
     result_file = open(out_file, "w+b")
