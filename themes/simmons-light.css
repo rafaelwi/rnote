@@ -1,20 +1,7 @@
-@page {
-    /* Note: the best size for the background images with letter size paper is 
-       1235 x 1600. I don't know why but with that sizing there are no issues 
-       with extra whitespace on the page. */
-    background-image: url('themes/dark.jpg');
-    size: letter;
-
-    @frame {
-        margin: 1in;
-    }
-}
-
 body {
-    font-family: "Times New Roman", Times, serif;
+    font-family: "Arial", Arial, Helvetica, sans-serif;
     display: block;
     margin: 8px;
-    color: #fff;
 }
 
 h1 {
@@ -67,14 +54,14 @@ ul {
   }
   
 ul ul {
-    list-style-type: circle;
+    list-style-image: url("themes/simmons-light/circle.png");
     display: block;
     margin-top: -8px;
     margin-bottom: -8px;
 }
   
 ul ul ul {
-    list-style-type: square;
+    list-style-image: url("themes/simmons-light/square.png");
     display: block;
     margin-top: -8px;
     margin-bottom: -8px;

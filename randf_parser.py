@@ -75,7 +75,7 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
     return raw_html
 
 def parseInsCommand(l: str, line_no: int, raw_html: str) -> str:
-    # Remove the $ part of the string, then split it into  a list
+    # Remove the $ part of the string, then split it into a list
     l = re.sub('\$', '', l)
     cmd = l.split()
     first = cmd[0]

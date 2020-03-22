@@ -48,21 +48,22 @@ li {
 }
 
 ul {
+    list-style-type: disc;
     display: block;
     margin-left: 1.5em;
-    list-style-type: disc;
   }
   
 ul ul {
-    display: block;
     list-style-type: circle;
+    display: block;
+    margin-top: -8px;
+    margin-bottom: -8px;
 }
   
 ul ul ul {
-    display: block;
     list-style-type: square;
+    display: block;
+    margin-top: -8px;
+    margin-bottom: -8px;
 }
 
-pre {
-    white-space: pre;
-}

@@ -60,27 +60,43 @@ def generateBulletPoints(html: str, bullets: list):
     first_line = bullets[0]
 
     # Count the number of dashes in the first one
-    num_indents = first_line.split()[0].count('-')
-    print(">" + str(num_indents))
+    indent_lvl = first_line.split()[0].count('-')
+    print(">" + str(indent_lvl))
 
     # Create the yattag stuff
     doc, tag, text, line = Doc().ttl()
 
-    # Create the level of indent that we need
-    for i in range(num_indents - 1):
+    # Create the level of indent that we need for the first line
+    for i in range(indent_lvl):
         doc.asis('<ul>')
 
-    # Loop through the list of items that we have and add them
-    with tag('ul'):
-        for b in bullets:
-            with tag('li'):
-                b = re.sub('^(-+)', '', b)
-                b = b.strip()
-                text(b)
+    for b in bullets:
+        # Count the level of indent that we are currently on and compare
+        current_indent_lvl = b.split()[0].count('-')
 
-    for i in range(num_indents - 1):
+        # If there are more bullets, add the difference number of ul tags
+        if current_indent_lvl > indent_lvl:
+            for i in range(current_indent_lvl - indent_lvl):
+                doc.asis('<ul>')
+            indent_lvl = current_indent_lvl
+
+        # If there are fewer bullets, add the difference of ending ul tags
+        elif current_indent_lvl < indent_lvl:
+            for i in range(indent_lvl - current_indent_lvl):
+                doc.asis('</ul>')
+            indent_lvl = current_indent_lvl
+
+        # Add the li tag
+        with tag('li'):
+            b = re.sub('^(-+)', '', b)
+            b = b.strip()
+            text(b)
+
+    # Add in the remaining closing ul tags
+    for i in range(indent_lvl):
         doc.asis('</ul>')
 
+    # Add new list to the html and return
     upper = html.split('</body>', 1)[0]
     lower = html.split('</body>', 1)[1]
 
