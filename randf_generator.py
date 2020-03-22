@@ -52,6 +52,7 @@ def insertImageIntoHtml(html: str, img: str) -> str:
 def convertHtmlToPdf(raw_html: str, style: sty.Styler, out_file: str) -> bool:
     result_file = open(out_file, "w+b")
     status = pisa.CreatePDF(raw_html, dest=result_file, default_css=style.theme, debug=1)
+    #status = pisa.CreatePDF(raw_html, dest=result_file, debug=1)
     result_file.close()
     return status
 
@@ -74,6 +75,7 @@ def generateBulletPoints(html: str, bullets: list):
         for b in bullets:
             with tag('li'):
                 b = re.sub('^(-+)', '', b)
+                b = b.strip()
                 text(b)
 
     for i in range(num_indents - 1):
