@@ -41,3 +41,29 @@ p {
     margin-left: 0;
     margin-right: 0;
 }
+
+li {
+    display: block;
+    margin: -8px 0 -8px 0;
+}
+
+ul {
+    list-style-type: disc;
+    display: block;
+    margin-left: 1.5em;
+  }
+  
+ul ul {
+    list-style-type: circle;
+    display: block;
+    margin-top: -8px;
+    margin-bottom: -8px;
+}
+  
+ul ul ul {
+    list-style-type: square;
+    display: block;
+    margin-top: -8px;
+    margin-bottom: -8px;
+}
+
