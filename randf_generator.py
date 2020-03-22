@@ -1,5 +1,7 @@
 import randf_styling as sty
 
+import re
+
 from yattag import Doc, indent
 from xhtml2pdf import pisa
 from datetime import datetime
@@ -52,3 +54,33 @@ def convertHtmlToPdf(raw_html: str, style: sty.Styler, out_file: str) -> bool:
     status = pisa.CreatePDF(raw_html, dest=result_file, default_css=style.theme, debug=1)
     result_file.close()
     return status
+
+def generateBulletPoints(html: str, bullets: list):
+    first_line = bullets[0]
+
+    # Count the number of dashes in the first one
+    num_indents = first_line.split()[0].count('-')
+    print(">" + str(num_indents))
+
+    # Create the yattag stuff
+    doc, tag, text, line = Doc().ttl()
+
+    # Create the level of indent that we need
+    for i in range(num_indents - 1):
+        doc.asis('<ul>')
+
+    # Loop through the list of items that we have and add them
+    with tag('ul'):
+        for b in bullets:
+            with tag('li'):
+                b = re.sub('^(-+)', '', b)
+                text(b)
+
+    for i in range(num_indents - 1):
+        doc.asis('</ul>')
+
+    upper = html.split('</body>', 1)[0]
+    lower = html.split('</body>', 1)[1]
+
+    upper += doc.getvalue() + "</body>" + lower
+    return indent(upper)

@@ -42,6 +42,7 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
             # Process this into meaningful document :)
             print("starting: " + l + "\nresult: " + str(bullet_list))
             line_no += len(bullet_list)
+            raw_html = gen.generateBulletPoints(raw_html, bullet_list)
         elif l.startswith('= '):
             raw_html = parseHtmlElement(l, line_no, raw_html, '= *', 'p')
         else:
