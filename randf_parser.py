@@ -83,6 +83,8 @@ def parseInsCommand(l: str, line_no: int, raw_html: str) -> str:
     if first == 'br':
         print('line break')
         raw_html = gen.insertElementIntoHtml(raw_html, '', 'br')
+    elif first == 'hr':
+        print('TODO: horizontal rule')
     elif first == 'date':
         raw_html = gen.insertElementIntoHtml(raw_html, str(date.today()), 'p')
     elif (first == 'wi' or first == 'li') and (len(cmd) >= 2):
@@ -93,8 +95,7 @@ def parseInsCommand(l: str, line_no: int, raw_html: str) -> str:
         print("[PARSER_ERR] Error on or around line {}, cound not determine insert command '${}'. Skipping this command.".format(line_no, first))
     return raw_html
 
-def parseHtmlElement(l: str, line_no: int, raw_html: str, pattern: str, 
-    element: str) -> str:
+def parseHtmlElement(l: str, line_no: int, raw_html: str, pattern: str, element: str) -> str:
     l = re.sub(pattern, '', l)
 
     # Before adding the line, see if there is anything that needs to be parsed

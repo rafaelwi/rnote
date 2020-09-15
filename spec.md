@@ -77,29 +77,29 @@ Uses a template file found in the `template/` folder to determine preprocessor c
 ## Styling Commands
 These commands style text in the document.
 
-| Command | Action | Example |
-|---|---|---|
-| # | Creates a title for the document. | `# My First Document` |
-| @ | Creates a secondary header for the document. Great for bylines and dates | `@ By Rafael Wiska Ilnicki \| $date`
-| ! | Creates a section header | `! Chapter 1` |
-| - | Creates a bullet point. Adding more increases the level of indentation. | `- This is a point`<br>`-- This is an indented point`
-| = | Creates a paragraph of text with no indentation. | `= This is a paragraph of text. Not a bullet point, this would not be indented when compiled.`|
-| \*text\* | Italicizes text. | \*This text is italiciz*ed\* |
-| \*\*text\*\* | Bolds text. | \*\*This text is bolded\*\* |
-| \_\_text\_\_ | Underlines text. | \_\_This text is underlined\_\_ |
+| Command | Action | Example | Implemented? |
+|---|---|---|---|
+| # | Creates a title for the document. | `# My First Document` | ✔ |
+| @ | Creates a secondary header for the document. Great for bylines and dates | `@ By Rafael Wiska Ilnicki \| $date` | ✔ |
+| ! | Creates a section header | `! Chapter 1` | ✔ |
+| - | Creates a bullet point. Adding more increases the level of indentation. | `- This is a point`<br>`-- This is an indented point` | ✔ |
+| = | Creates a paragraph of text with no indentation. | `= This is a paragraph of text. Not a bullet point, this would not be indented when compiled.`| ✔ |
+| \*text\* | Italicizes text. | \*This text is italicized\* | ❌ |
+| \*\*text\*\* | Bolds text. | \*\*This text is bolded\*\* | ❌ |
+| \_\_text\_\_ | Underlines text. | \_\_This text is underlined\_\_ | ❌ |
 
 <hr>
 
 ## Insert Commands
 These commands insert styling into the final document.
 
-| Command | Action |
-|---|---|
-| $br | Line break |
-| $hr | Horizontal rule |
-| $date | Inserts the current date |
-| $wi *URL* | Inserts an image found on the web from the given URL |
-| $li *FILENAME* | Inserts an image found at the given filepath |
+| Command | Action | Implemented? |
+|---|---|---|
+| $br | Line break | ✔ |
+| $hr | Horizontal rule | ❌ |
+| $date | Inserts the current date | ✔ |
+| $wi *URL* | Inserts an image found on the web from the given URL | ✔ |
+| $li *FILENAME* | Inserts an image found at the given filepath | ✔ |
 
 <hr>
 
