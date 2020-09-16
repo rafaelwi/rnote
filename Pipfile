@@ -7,10 +7,10 @@ verify_ssl = true
 pylint = "*"
 
 [packages]
-html5lib = "==1.1"
+html5lib = "*"
 reportlab = "==3.5.49"
 six = "==1.15.0"
-tinycss = "==0.4"
+tinycss = "*"
 webencodings = "==0.5.1"
 xhtml2pdf = "==0.2.4"
 yattag = "==1.14.0"
