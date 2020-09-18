@@ -57,25 +57,43 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
     elif cmd[0] == 'margin' or cmd[0] == 'margins':
         # Determine the margin size
         new_margins = cmd[1]
+        style.margin = new_margins
         print('Setting margins to {}'.format(new_margins))
         if new_margins == 'normal':
-            style.margin = new_margins
             raw_html = gen.generateMargins(raw_html, 2, 2)
         elif new_margins == 'narrow':
-            style.margin = new_margins
             raw_html = gen.generateMargins(raw_html, 1, 1)
         elif new_margins == 'moderate':
-            style.margin = new_margins
             raw_html = gen.generateMargins(raw_html, 1, 0.75)
         elif new_margins == 'wide':
-            style.margin = new_margins
             raw_html = gen.generateMargins(raw_html, 1, 2)
         else:
             print('[PARSER_ERR] Error on or around line {}, could not determine margin size, defaulting to normal margins.\n').format(line_no)
+            style.margin = 'normal'
     elif cmd[0] == 'size':
-        print('TODO: set size')
+        new_size = cmd[1].lower()
+
+        # Build list of allowed sizes
+        allowed_sizes = ['letter', 'legal', 'elevenseventeen']
+        for i in range(7):
+            allowed_sizes.append('a{}'.format(i))
+            allowed_sizes.append('b{}'.format(i))
+        
+        # Check if size is allowed
+        if new_size in allowed_sizes:
+            style.pagesize = new_size
+            raw_html = gen.generatePageSize(raw_html, style)
+        else:
+            print('[PARSER_ERR] Error on or around line {}, could not determine page size, defaulting to letter (8.5" x 11")\n').format(line_no)
+            style.pagesize = 'letter'
     elif cmd[0] == 'align' or cmd[0] == 'orientation':
         print('TODO: set align')
+        """
+            NOTE!
+            It may make more sense to get a list of all of the .pp commands first,
+            then process them all at the same time at the end. IDK how it will
+            handle modifying orientation.
+        """
     elif cmd[0] == 'pgnum':
         print('TODO: set pgnum')
     elif cmd[0] == 'title':
