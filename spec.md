@@ -96,7 +96,7 @@ These commands insert styling into the final document.
 | Command | Action | Implemented? |
 |---|---|---|
 | $br | Line break | ✔ |
-| $hr | Horizontal rule | ❌ |
+| $hr | Horizontal rule | ✔ |
 | $date | Inserts the current date | ✔ |
 | $wi *URL* | Inserts an image found on the web from the given URL | ✔ |
 | $li *FILENAME* | Inserts an image found at the given filepath | ✔ |

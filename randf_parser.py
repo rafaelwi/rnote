@@ -84,7 +84,7 @@ def parseInsCommand(l: str, line_no: int, raw_html: str) -> str:
         print('line break')
         raw_html = gen.insertElementIntoHtml(raw_html, '', 'br')
     elif first == 'hr':
-        print('TODO: horizontal rule')
+        raw_html = gen.insertElementIntoHtml(raw_html, '', 'hr')
     elif first == 'date':
         raw_html = gen.insertElementIntoHtml(raw_html, str(date.today()), 'p')
     elif (first == 'wi' or first == 'li') and (len(cmd) >= 2):
