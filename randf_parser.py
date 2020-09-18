@@ -16,7 +16,7 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
         if l.startswith('//') or l == '':
             print(str(line_no) + ": Encountered a comment or blank line, skipping")
             continue
-        if l.startswith('.pp'):
+        elif l.startswith('.pp'):
             raw_html = parsePpCommand(l, line_no, style, raw_html)
         elif l.startswith('$'):
             raw_html = parseInsCommand(l, line_no, raw_html)
@@ -27,20 +27,17 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
         elif l.startswith('! '):
             raw_html = parseHtmlElement(l, line_no, raw_html, '! *', 'h3')
         elif l.startswith('-'):
-            print(str(line_no) + ": TODO: parsing bullet: " + l)
             """ Create a new list with all of the lines with bullets, and then
                 parse them later """
             bullet_list = [l]
 
             for j in islice(doc_iter, 0, None):
-                print("element: " + j)
                 if j.startswith('-'):
                     bullet_list.append(j)
                 else:
                     break
             
             # Process this into meaningful document :)
-            print("starting: " + l + "\nresult: " + str(bullet_list))
             line_no += len(bullet_list)
             raw_html = gen.generateBulletPoints(raw_html, bullet_list)
         elif l.startswith('= '):
@@ -57,8 +54,24 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
 
     if cmd[0] == 'theme':
         style.theme = cmd[1]
-    elif cmd[0] == 'margin':
-        print('TODO: set margin')
+    elif cmd[0] == 'margin' or cmd[0] == 'margins':
+        # Determine the margin size
+        new_margins = cmd[1]
+        print('Setting margins to {}'.format(new_margins))
+        if new_margins == 'normal':
+            style.margin = new_margins
+            raw_html = gen.generateMargins(raw_html, 2, 2)
+        elif new_margins == 'narrow':
+            style.margin = new_margins
+            raw_html = gen.generateMargins(raw_html, 1, 1)
+        elif new_margins == 'moderate':
+            style.margin = new_margins
+            raw_html = gen.generateMargins(raw_html, 1, 0.75)
+        elif new_margins == 'wide':
+            style.margin = new_margins
+            raw_html = gen.generateMargins(raw_html, 1, 2)
+        else:
+            print('[PARSER_ERR] Error on or around line {}, could not determine margin size, defaulting to normal margins.\n').format(line_no)
     elif cmd[0] == 'size':
         print('TODO: set size')
     elif cmd[0] == 'align' or cmd[0] == 'orientation':
@@ -71,7 +84,6 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
         print('TODO: set template')
     else:
         print("[PARSER_ERR] Error on or around line {}, could not determine preprocessor command '{}'. Skipping this command.".format(line_no, cmd[0]))
-    
     return raw_html
 
 def parseInsCommand(l: str, line_no: int, raw_html: str) -> str:

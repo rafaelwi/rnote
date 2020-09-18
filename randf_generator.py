@@ -102,3 +102,14 @@ def generateBulletPoints(html: str, bullets: list):
 
     upper += doc.getvalue() + "</body>" + lower
     return indent(upper)
+
+def generateMargins(html: str, topBottom: float, leftRight: float) -> str:
+    upper, lower = html.split('</body>', 1)[0], html.split('</body>', 1)[1]
+    doc, tag, text, line = Doc().ttl()
+
+    with tag('style'):
+        doc.asis("@page {")
+        doc.asis("margin: {0}cm {1}cm {0}cm {1}cm;".format(topBottom, leftRight))
+        doc.asis("}")
+    upper += doc.getvalue() + "</body>" + lower
+    return indent(upper)
