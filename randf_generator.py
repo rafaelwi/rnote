@@ -19,7 +19,7 @@ def generateHtmlHeader() -> str:
             doc.stag('meta', name='author', content='RANDF Compiler')
         with tag('body'):
             with tag('style'):
-                doc.asis('@page {')
+                doc.asis('@page {{size: {0} {1}; @frame content_frame {{margin: {2}cm {3}cm {2}cm {3}cm;}}'.format('letter', 'portrait', 2.0, 2.0))
                 doc.asis('/*EndOf@pageManualStyling*/}') 
     return (indent(doc.getvalue()))
 
@@ -117,7 +117,12 @@ def generatePageSize(html: str, style: sty.Styler) -> str:
     upper, lower = html.split('/*EndOf@pageManualStyling*/}', 1)[0], html.split('/*EndOf@pageManualStyling*/}', 1)[1]
     doc, tag, text, line = Doc().ttl()
 
+    doc.asis('size: {0} {1}; @frame content_frame {{margin: {2}cm {3}cm {2}cm {3}cm;}}'.format(style.pagesize, style.orientation, style.topBottom, style.leftRight))
+    upper = re.sub(r'size:.*;}', doc.getvalue(), upper)
+
+    """
     doc.asis("size: {} {};".format(style.pagesize, style.orientation))
-    doc.asis ('@frame {margin: 1in;}')
-    upper += doc.getvalue() + "/*EndOf@pageManualStyling*/}" + lower
+    doc.asis ("@frame {{margin: {0}cm {1}cm {0}cm {1}cm;}}".format(style.topBottom, style.leftRight))
+    """
+    upper += "/*EndOf@pageManualStyling*/}" + lower
     return indent(upper)

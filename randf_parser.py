@@ -60,13 +60,17 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
         style.margin = new_margins
         print('Setting margins to {}'.format(new_margins))
         if new_margins == 'normal':
-            raw_html = gen.generateMargins(raw_html, 2, 2)
+            style.topBottom = style.leftRight = 2
+            raw_html = gen.generatePageSize(raw_html, style)
         elif new_margins == 'narrow':
-            raw_html = gen.generateMargins(raw_html, 1, 1)
+            style.topBottom = style.leftRight = 1
+            raw_html = gen.generatePageSize(raw_html, style)
         elif new_margins == 'moderate':
-            raw_html = gen.generateMargins(raw_html, 1, 0.75)
+            style.topBottom, style.leftRight = 1, 0.75
+            raw_html = gen.generatePageSize(raw_html, style)
         elif new_margins == 'wide':
-            raw_html = gen.generateMargins(raw_html, 1, 2)
+            style.topBottom, style.leftRight = 1, 2
+            raw_html = gen.generatePageSize(raw_html, style)
         else:
             print('[PARSER_ERR] Error on or around line {}, could not determine margin size, defaulting to normal margins.\n').format(line_no)
             style.margin = 'normal'
@@ -87,7 +91,20 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
             print('[PARSER_ERR] Error on or around line {}, could not determine page size, defaulting to letter (8.5" x 11")\n').format(line_no)
             style.pagesize = 'letter'
     elif cmd[0] == 'align' or cmd[0] == 'orientation':
-        print('TODO: set align')
+        print('Setting orientation')
+        new_orient = cmd[1].lower()
+
+        # Set orientation
+        if new_orient in ['port', 'portrait', 'vert','verical']:
+            style.orientation = 'portrait'
+            raw_html = gen.generatePageSize(raw_html, style)
+        elif new_orient in ['land', 'landscape', 'horz', 'horizontal']:
+            style.orientation = 'landscape'
+            raw_html = gen.generatePageSize(raw_html, style)
+        else:
+            print('[PARSER_ERR] Error on or around line {}, could not determine page orientation, defaulting to portrait').format(line_no)
+            style.orientation = 'portrait'
+
         """
             NOTE!
             It may make more sense to get a list of all of the .pp commands first,

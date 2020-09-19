@@ -5,6 +5,8 @@ class Styler:
     def __init__(self):
         self.theme = 'light'
         self.margin = 'normal'
+        self.topBottom = 2.0
+        self.leftRight = 2.0
         self.pagesize = 'letter'
         self.orientation = 'portrait'
         self.pgnum = False
@@ -51,6 +53,24 @@ class Styler:
     def margin(self, new_margin):
         """ Sets a new margin """
         self._margin = new_margin
+
+    @property
+    def topBottom(self):
+        return self._topBottom
+
+    @topBottom.setter
+    def topBottom(self, new_TB):
+        """ Sets new topBottom value """
+        self._topBottom = new_TB
+
+    @property
+    def leftRight(self):
+        return self._leftRight
+
+    @leftRight.setter
+    def leftRight(self, new_LR):
+        """ Sets new leftRight value """
+        self._leftRight = new_LR
 
     @property
     def pagesize(self):
