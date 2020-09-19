@@ -19,36 +19,38 @@ def generateHtmlHeader() -> str:
             doc.stag('meta', name='author', content='RANDF Compiler')
         with tag('body'):
             with tag('style'):
-                doc.asis('@page {{size: {0} {1}; @frame content_frame {{margin: {2}cm {3}cm {2}cm {3}cm;}}'.format('letter', 'portrait', 2.0, 2.0))
-                doc.asis('/*EndOf@pageManualStyling*/}') 
-    return (indent(doc.getvalue()))
+                doc.asis('@page {{size: {0} {1}; @frame content_frame {{top: {2}cm; bottom: {4}cm; left: {3}cm; right: {5}cm; -pdf-frame-border:1;}}'.format('letter', 'portrait', 2.0, 2.0, 2*2.0, 2*2.0))
+                doc.asis('/*EndOf@pageManualStyling*/}')
+            with tag('div', id='content'):
+                pass
+    return ((doc.getvalue()))
 
 def insertElementIntoHtml(html: str, the_text: str, element: str) -> str:
-    upper = html.split('</body>', 1)[0]
-    lower = html.split('</body>', 1)[1]
+    upper = html.split('</div></body>', 1)[0]
+    lower = html.split('</div></body>', 1)[1]
     doc, tag, text, line = Doc().ttl()
 
     with tag(element):
         text(the_text)
     
-    upper += doc.getvalue() + "</body>" + lower
-    return indent(upper)
+    upper += doc.getvalue() + "</div></body>" + lower
+    return (upper)
 
 def insertDocTitleIntoHtml(html: str, the_title: str) -> str:
     upper = html.split('</title>', 1)[0]
     lower = html.split('</title>', 1)[1]
     upper += the_title + '</title>' + lower
-    return indent(upper)
+    return (upper)
 
 def insertImageIntoHtml(html: str, img: str) -> str:
-    upper = html.split('</body>', 1)[0]
-    lower = html.split('</body>', 1)[1]
+    upper = html.split('</div></body>', 1)[0]
+    lower = html.split('</div></body>', 1)[1]
     doc, tag, text, line = Doc().ttl()
 
     doc.stag('img', src=img)
 
-    upper += doc.getvalue() + '</body>' + lower
-    return indent(upper)
+    upper += doc.getvalue() + '</div></body>' + lower
+    return (upper)
 
 
 def convertHtmlToPdf(raw_html: str, style: sty.Styler, out_file: str) -> bool:
@@ -99,11 +101,11 @@ def generateBulletPoints(html: str, bullets: list):
         doc.asis('</ul>')
 
     # Add new list to the html and return
-    upper = html.split('</body>', 1)[0]
-    lower = html.split('</body>', 1)[1]
+    upper = html.split('</div></body>', 1)[0]
+    lower = html.split('</div></body>', 1)[1]
 
-    upper += doc.getvalue() + "</body>" + lower
-    return indent(upper)
+    upper += doc.getvalue() + "</div></body>" + lower
+    return (upper)
 
 def generateMargins(html: str, topBottom: float, leftRight: float) -> str:
     upper, lower = html.split('/*EndOf@pageManualStyling*/}', 1)[0], html.split('/*EndOf@pageManualStyling*/}', 1)[1]
@@ -111,13 +113,13 @@ def generateMargins(html: str, topBottom: float, leftRight: float) -> str:
 
     doc.asis("margin: {0}cm {1}cm {0}cm {1}cm;".format(topBottom, leftRight))
     upper += doc.getvalue() + "/*EndOf@pageManualStyling*/}" + lower
-    return indent(upper)
+    return (upper)
 
 def generatePageSize(html: str, style: sty.Styler) -> str:
     upper, lower = html.split('/*EndOf@pageManualStyling*/}', 1)[0], html.split('/*EndOf@pageManualStyling*/}', 1)[1]
     doc, tag, text, line = Doc().ttl()
 
-    doc.asis('size: {0} {1}; @frame content_frame {{margin: {2}cm {3}cm {2}cm {3}cm;}}'.format(style.pagesize, style.orientation, style.topBottom, style.leftRight))
+    doc.asis('size: {0} {1}; @frame content_frame {{top: {2}cm; bottom: {4}cm; left: {3}cm; right: {5}cm; -pdf-frame-border:1;}}'.format(style.pagesize, style.orientation, style.topBottom, style.leftRight, 2*style.topBottom, 2*style.leftRight))
     upper = re.sub(r'size:.*;}', doc.getvalue(), upper)
 
     """
@@ -125,4 +127,4 @@ def generatePageSize(html: str, style: sty.Styler) -> str:
     doc.asis ("@frame {{margin: {0}cm {1}cm {0}cm {1}cm;}}".format(style.topBottom, style.leftRight))
     """
     upper += "/*EndOf@pageManualStyling*/}" + lower
-    return indent(upper)
+    return (upper)
