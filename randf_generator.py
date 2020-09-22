@@ -19,8 +19,10 @@ def generateHtmlHeader() -> str:
             doc.stag('meta', name='author', content='RANDF Compiler')
         with tag('body'):
             with tag('style'):
-                doc.asis('@page {{size: {0} {1}; @frame content_frame {{top: {2}cm; bottom: {4}cm; left: {3}cm; right: {5}cm; -pdf-frame-border:1;}}'.format('letter', 'portrait', 2.0, 2.0, 2*2.0, 2*2.0))
+                style = sty.Styler() # Temp obj.
+                doc.asis('@page {{size: {} {}; @frame {{top: {}cm; left: {}cm; height: {}cm; width: {}cm;  -pdf-frame-border:1;}}'.format(style.pagesize, style.orientation, style.top, style.left, style.height, style.width))
                 doc.asis('/*EndOf@pageManualStyling*/}')
+                del style
             with tag('div', id='content'):
                 pass
     return ((doc.getvalue()))
@@ -116,10 +118,10 @@ def generateMargins(html: str, topBottom: float, leftRight: float) -> str:
     return (upper)
 
 def generatePageSize(html: str, style: sty.Styler) -> str:
-    upper, lower = html.split('/*EndOf@pageManualStyling*/}', 1)[0], html.split('/*EndOf@pageManualStyling*/}', 1)[1]
+    #upper, lower = html.split('/*EndOf@pageManualStyling*/}', 1)[0], html.split('/*EndOf@pageManualStyling*/}', 1)[1]
     doc, tag, text, line = Doc().ttl()
 
-    doc.asis('size: {0} {1}; @frame content_frame {{top: {2}cm; bottom: {4}cm; left: {3}cm; right: {5}cm; -pdf-frame-border:1;}}'.format(style.pagesize, style.orientation, style.topBottom, style.leftRight, 2*style.topBottom, 2*style.leftRight))
+    doc.asis('@page {{size: {} {}; @frame {{top: {}cm; left: {}cm; height: {}cm; width: {}cm;  -pdf-frame-border:1;}}'.format(style.pagesize, style.orientation, style.top, style.left, style.height, style.width))
     upper = re.sub(r'size:.*;}', doc.getvalue(), upper)
 
     """

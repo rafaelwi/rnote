@@ -1,17 +1,41 @@
+import randf_pagedimensions as pd
 import tinycss
 import os
 
 class Styler:
     def __init__(self):
+        self.pageDim = {
+            # Sizes ordered as WxH in cm
+            'a0': pd.PageDimensions(84.1, 118.9),
+            'a1': pd.PageDimensions(59.4, 84.1),
+            'a2': pd.PageDimensions(42.0, 59.4),
+            'a3': pd.PageDimensions(29.7, 42.0),
+            'a4': pd.PageDimensions(21.0, 29.7),
+            'a5': pd.PageDimensions(14.8, 21.0),
+            'a6': pd.PageDimensions(10.5, 14.8),
+            'b0': pd.PageDimensions(100.0, 141.4),
+            'b1': pd.PageDimensions(59.4, 84.1),
+            'b2': pd.PageDimensions(42.0, 59.4),
+            'b3': pd.PageDimensions(29.7, 42.0),
+            'b4': pd.PageDimensions(21.0, 29.7),
+            'b5': pd.PageDimensions(14.8, 21.0),
+            'b6': pd.PageDimensions(10.5, 14.8),
+            'elevenseventeen': pd.PageDimensions(21.59, 27.94),
+            'legal': pd.PageDimensions(21.59, 35.56),
+            'letter': pd.PageDimensions(27.94, 43.1)
+        }
         self.theme = 'light'
         self.margin = 'normal'
-        self.topBottom = 2.0
-        self.leftRight = 2.0
+        self.top = 2.0
+        self.left = 2.0
         self.pagesize = 'letter'
-        self.orientation = 'portrait'
+        self.orientation = 'portrait' # One of ['portrait', 'landscape']
         self.pgnum = False
         self.title = 'New Document'
         self.template = ''
+        self.width = self.__set_width()
+        self.height = self.__set_height()
+
 
     @property
     def theme(self):
@@ -55,22 +79,22 @@ class Styler:
         self._margin = new_margin
 
     @property
-    def topBottom(self):
-        return self._topBottom
+    def top(self):
+        return self._top
 
-    @topBottom.setter
-    def topBottom(self, new_TB):
-        """ Sets new topBottom value """
-        self._topBottom = new_TB
+    @top.setter
+    def top(self, new_TB):
+        """ Sets new top value """
+        self._top = new_TB
 
     @property
-    def leftRight(self):
-        return self._leftRight
+    def left(self):
+        return self._left
 
-    @leftRight.setter
-    def leftRight(self, new_LR):
-        """ Sets new leftRight value """
-        self._leftRight = new_LR
+    @left.setter
+    def left(self, new_LR):
+        """ Sets new left value """
+        self._left = new_LR
 
     @property
     def pagesize(self):
@@ -116,3 +140,35 @@ class Styler:
     def template(self, new_template):
         """ Sets the preprocessor command template of the document """
         self._template = new_template
+
+    @property
+    def width(self):
+        return self._width
+
+    @width.setter
+    def width(self, new_width):
+        if self.orientation == 'portrait':
+            self.__set_width()
+        if self.orientation == 'landscape':
+            self.__set_height()
+            
+    @property
+    def height(self):
+        return self.height
+    
+    @height.setter
+    def height(self, new_height):
+        if self.orientation == 'portrait':
+            self.__set_height()
+        if self.orientation == 'landscape':
+            self.__set_width()
+
+    def __set_height(self):
+        page_height = (self.pageDim[self._pagesize]).height
+        self._width = page_height - (2 * self._top)
+
+    def __set_width(self):
+        page_width = (self.pageDim[self._pagesize]).width
+        self._width = page_width - (2 * self._left)
+    
+
