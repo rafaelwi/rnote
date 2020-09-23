@@ -86,6 +86,9 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
         # Check if size is allowed
         if new_size in allowed_sizes:
             style.pagesize = new_size
+            style.height = 1
+            style.width = 1
+            print(style.pagesize)
             raw_html = gen.generatePageSize(raw_html, style)
         else:
             print('[PARSER_ERR] Error on or around line {}, could not determine page size, defaulting to letter (8.5" x 11")\n').format(line_no)
@@ -97,9 +100,13 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
         # Set orientation
         if new_orient in ['port', 'portrait', 'vert','verical']:
             style.orientation = 'portrait'
+            style.height = 1
+            style.width = 1
             raw_html = gen.generatePageSize(raw_html, style)
         elif new_orient in ['land', 'landscape', 'horz', 'horizontal']:
             style.orientation = 'landscape'
+            style.height = 1
+            style.width = 1
             raw_html = gen.generatePageSize(raw_html, style)
         else:
             print('[PARSER_ERR] Error on or around line {}, could not determine page orientation, defaulting to portrait').format(line_no)

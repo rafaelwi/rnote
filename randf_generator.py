@@ -20,7 +20,7 @@ def generateHtmlHeader() -> str:
         with tag('body'):
             with tag('style'):
                 style = sty.Styler() # Temp obj.
-                doc.asis('@page {{size: {} {}; @frame {{top: {}cm; left: {}cm; height: {}cm; width: {}cm;  -pdf-frame-border:1;}}'.format(style.pagesize, style.orientation, style.top, style.left, style.height, style.width))
+                doc.asis('@page {{size: {} {}; @frame {{top: {}cm; left: {}cm; height: {}cm; width: {}cm; -pdf-frame-border:1;}}'.format(style.pagesize, style.orientation, style.top, style.left, style.height, style.width))
                 doc.asis('/*EndOf@pageManualStyling*/}')
                 del style
             with tag('div', id='content'):
@@ -118,15 +118,13 @@ def generateMargins(html: str, topBottom: float, leftRight: float) -> str:
     return (upper)
 
 def generatePageSize(html: str, style: sty.Styler) -> str:
-    #upper, lower = html.split('/*EndOf@pageManualStyling*/}', 1)[0], html.split('/*EndOf@pageManualStyling*/}', 1)[1]
+    upper, lower = html.split('/*EndOf@pageManualStyling*/}', 1)[0], html.split('/*EndOf@pageManualStyling*/}', 1)[1]
     doc, tag, text, line = Doc().ttl()
+    style.width = 1
+    style.height = 1
 
-    doc.asis('@page {{size: {} {}; @frame {{top: {}cm; left: {}cm; height: {}cm; width: {}cm;  -pdf-frame-border:1;}}'.format(style.pagesize, style.orientation, style.top, style.left, style.height, style.width))
+    doc.asis('size: {} {}; @frame {{top: {}cm; left: {}cm; height: {}cm; width: {}cm; -pdf-frame-border:1;}}'.format(style.pagesize, style.orientation, style.top, style.left, style.height, style.width))
     upper = re.sub(r'size:.*;}', doc.getvalue(), upper)
 
-    """
-    doc.asis("size: {} {};".format(style.pagesize, style.orientation))
-    doc.asis ("@frame {{margin: {0}cm {1}cm {0}cm {1}cm;}}".format(style.topBottom, style.leftRight))
-    """
     upper += "/*EndOf@pageManualStyling*/}" + lower
-    return (upper)
+    return upper

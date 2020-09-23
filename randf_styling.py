@@ -33,8 +33,8 @@ class Styler:
         self.pgnum = False
         self.title = 'New Document'
         self.template = ''
-        self.width = self.__set_width()
-        self.height = self.__set_height()
+        self.width
+        self.height
 
 
     @property
@@ -104,6 +104,9 @@ class Styler:
     def pagesize(self, new_pagesize):
         """ Sets a new pagesize """
         self._pagesize = new_pagesize
+        self._height = 1
+        self._width = 1
+
 
     @property
     def orientation(self):
@@ -146,29 +149,31 @@ class Styler:
         return self._width
 
     @width.setter
-    def width(self, new_width):
-        if self.orientation == 'portrait':
-            self.__set_width()
-        if self.orientation == 'landscape':
-            self.__set_height()
+    def width(self, a):
+        if self._orientation == 'portrait':
+            page_width = (self.pageDim[self._pagesize]).width
+            print("w: {}".format(page_width))
+            self._width = page_width - (2 * self._left)
+        if self._orientation == 'landscape':
+            page_height = (self.pageDim[self._pagesize]).height
+            print("h: {} {}".format(page_height, self._pagesize))
+            self._width = page_height - (2 * self._top)
+
             
     @property
     def height(self):
-        return self.height
+        return self._height
     
     @height.setter
-    def height(self, new_height):
-        if self.orientation == 'portrait':
-            self.__set_height()
-        if self.orientation == 'landscape':
-            self.__set_width()
+    def height(self, a):
+        if self._orientation == 'portrait':
+            page_height = (self.pageDim[self._pagesize]).height
+            print("h: {} {}".format(page_height, self._pagesize))
+            self._height = page_height - (2 * self._top)
+        if self._orientation == 'landscape':
+            page_width = (self.pageDim[self._pagesize]).width
+            print("w: {}".format(page_width))
+            self._height = page_width - (2 * self._left)
 
-    def __set_height(self):
-        page_height = (self.pageDim[self._pagesize]).height
-        self._width = page_height - (2 * self._top)
-
-    def __set_width(self):
-        page_width = (self.pageDim[self._pagesize]).width
-        self._width = page_width - (2 * self._left)
     
 
