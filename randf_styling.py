@@ -152,11 +152,9 @@ class Styler:
     def width(self, a):
         if self._orientation == 'portrait':
             page_width = (self.pageDim[self._pagesize]).width
-            print("w: {}".format(page_width))
             self._width = page_width - (2 * self._left)
         if self._orientation == 'landscape':
             page_height = (self.pageDim[self._pagesize]).height
-            print("h: {} {}".format(page_height, self._pagesize))
             self._width = page_height - (2 * self._top)
 
             
@@ -168,11 +166,9 @@ class Styler:
     def height(self, a):
         if self._orientation == 'portrait':
             page_height = (self.pageDim[self._pagesize]).height
-            print("h: {} {}".format(page_height, self._pagesize))
             self._height = page_height - (2 * self._top)
         if self._orientation == 'landscape':
             page_width = (self.pageDim[self._pagesize]).width
-            print("w: {}".format(page_width))
             self._height = page_width - (2 * self._left)
 
     

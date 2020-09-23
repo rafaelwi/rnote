@@ -86,8 +86,6 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
         # Check if size is allowed
         if new_size in allowed_sizes:
             style.pagesize = new_size
-            style.height = 1
-            style.width = 1
             print(style.pagesize)
             raw_html = gen.generatePageSize(raw_html, style)
         else:
@@ -100,24 +98,13 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
         # Set orientation
         if new_orient in ['port', 'portrait', 'vert','verical']:
             style.orientation = 'portrait'
-            style.height = 1
-            style.width = 1
             raw_html = gen.generatePageSize(raw_html, style)
         elif new_orient in ['land', 'landscape', 'horz', 'horizontal']:
             style.orientation = 'landscape'
-            style.height = 1
-            style.width = 1
             raw_html = gen.generatePageSize(raw_html, style)
         else:
             print('[PARSER_ERR] Error on or around line {}, could not determine page orientation, defaulting to portrait').format(line_no)
             style.orientation = 'portrait'
-
-        """
-            NOTE!
-            It may make more sense to get a list of all of the .pp commands first,
-            then process them all at the same time at the end. IDK how it will
-            handle modifying orientation.
-        """
     elif cmd[0] == 'pgnum':
         print('TODO: set pgnum')
     elif cmd[0] == 'title':

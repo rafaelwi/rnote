@@ -67,7 +67,6 @@ def generateBulletPoints(html: str, bullets: list):
 
     # Count the number of dashes in the first one
     indent_lvl = first_line.split()[0].count('-')
-    print(">" + str(indent_lvl))
 
     # Create the yattag stuff
     doc, tag, text, line = Doc().ttl()
