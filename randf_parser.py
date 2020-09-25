@@ -106,11 +106,23 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
             print('[PARSER_ERR] Error on or around line {}, could not determine page orientation, defaulting to portrait').format(line_no)
             style.orientation = 'portrait'
     elif cmd[0] == 'pgnum':
-        print('TODO: set pgnum')
+        # TODO: PAGE NUMBERS
+        print("Feature '.pp pgnum' has not been implemented yet!")
     elif cmd[0] == 'title':
         raw_html = gen.insertDocTitleIntoHtml(raw_html, re.sub('^title?', '', l))
     elif cmd[0] == 'template' or cmd[0] == 'temp' or cmd[0] == 'templ8':
-        print('TODO: set template')
+        print('Setting template')
+        # Le recursive function
+        # Read in file from 'template' folder
+        filename = cmd[1]
+        pp_commands = []
+        with open('templates/' + filename) as f:
+            pp_commands = f.readlines()
+            #NOTE: It may be more efficient to read one line in at a time and do its instruction
+        
+        for cmd in pp_commands:
+            raw_html = parsePpCommand(cmd.strip(), line_no, style, raw_html)
+
     else:
         print("[PARSER_ERR] Error on or around line {}, could not determine preprocessor command '{}'. Skipping this command.".format(line_no, cmd[0]))
     return raw_html
