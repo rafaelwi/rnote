@@ -86,7 +86,6 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
         # Check if size is allowed
         if new_size in allowed_sizes:
             style.pagesize = new_size
-            print(style.pagesize)
             raw_html = gen.generatePageSize(raw_html, style)
         else:
             print('[PARSER_ERR] Error on or around line {}, could not determine page size, defaulting to letter (8.5" x 11")\n').format(line_no)
@@ -112,8 +111,6 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
         raw_html = gen.insertDocTitleIntoHtml(raw_html, re.sub('^title?', '', l))
     elif cmd[0] == 'template' or cmd[0] == 'temp' or cmd[0] == 'templ8':
         print('Setting template')
-        # Le recursive function
-        # Read in file from 'template' folder
         filename = cmd[1]
         pp_commands = []
         with open('templates/' + filename) as f:
@@ -122,7 +119,6 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
         
         for cmd in pp_commands:
             raw_html = parsePpCommand(cmd.strip(), line_no, style, raw_html)
-
     else:
         print("[PARSER_ERR] Error on or around line {}, could not determine preprocessor command '{}'. Skipping this command.".format(line_no, cmd[0]))
     return raw_html
