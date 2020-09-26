@@ -113,7 +113,7 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
         print('Setting template')
         filename = cmd[1]
         pp_commands = []
-        with open('templates/' + filename) as f:
+        with open('templates/' + filename + '.rdtp') as f:
             pp_commands = f.readlines()
             #NOTE: It may be more efficient to read one line in at a time and do its instruction
         
