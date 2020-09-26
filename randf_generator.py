@@ -108,13 +108,6 @@ def generateBulletPoints(html: str, bullets: list):
     upper += doc.getvalue() + "</div></body>" + lower
     return (upper)
 
-def generateMargins(html: str, topBottom: float, leftRight: float) -> str:
-    upper, lower = html.split('/*EndOf@pageManualStyling*/}', 1)[0], html.split('/*EndOf@pageManualStyling*/}', 1)[1]
-    doc, tag, text, line = Doc().ttl()
-
-    doc.asis("margin: {0}cm {1}cm {0}cm {1}cm;".format(topBottom, leftRight))
-    upper += doc.getvalue() + "/*EndOf@pageManualStyling*/}" + lower
-    return (upper)
 
 def generatePageSize(html: str, style: sty.Styler) -> str:
     upper, lower = html.split('/*EndOf@pageManualStyling*/}', 1)[0], html.split('/*EndOf@pageManualStyling*/}', 1)[1]
@@ -122,8 +115,36 @@ def generatePageSize(html: str, style: sty.Styler) -> str:
     style.width = 1
     style.height = 1
 
-    doc.asis('size: {} {}; @frame {{top: {}cm; left: {}cm; height: {}cm; width: {}cm; -pdf-frame-border:1;}}'.format(style.pagesize, style.orientation, style.top, style.left, style.height, style.width))
+    doc.asis('size: {} {}; @frame {{top: {}cm; left: {}cm; height: {}cm; width: {}cm;}}'.format(style.pagesize, style.orientation, style.top, style.left, style.height, style.width))
     upper = re.sub(r'size:.*;}', doc.getvalue(), upper)
 
     upper += "/*EndOf@pageManualStyling*/}" + lower
     return upper
+
+def generateTable(html: str, head: [str], rows: [str]) -> str:
+    print(head)
+    print(rows)
+
+    upper, lower = html.split('</div></body>', 1)[0], html.split('</div></body>', 1)[1]
+    doc, tag, text, line = Doc().ttl()
+
+    with tag('table'):
+        # Generate header
+        with tag('tr'):
+            for i in head:
+                with tag('th'):
+                    text(i.strip())
+        
+        # Generate content in table
+        for r in rows:
+            with tag('tr'):
+                r = r.split(';')
+                with tag('td'):
+                    text(r[0][2:])
+                for s in r[1:]:
+                    with tag('td'):
+                        text(s.strip())
+
+    # Insert table into doc
+    upper += doc.getvalue() + '</div></body>' + lower
+    return indent(upper)

@@ -18,6 +18,20 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
             continue
         elif l.startswith('.pp'):
             raw_html = parsePpCommand(l, line_no, style, raw_html)
+        elif l.startswith('$table'):
+            print('Inserting table')
+            table_header = ' '.join(l.split()[1:]).split(';')
+            table_list = []
+
+            for j in islice(doc_iter, 0, None):
+                if j.startswith('-'):
+                    table_list.append(j)
+                elif j == '$endtable':
+                    print('Successfully reached the end of the table')
+                    line_no += len(table_list)
+                    raw_html = gen.generateTable(raw_html, table_header, table_list)
+                else:
+                    printf('[PARSER_ERR] Syntax error when processing list, expecting table row or $endtable')
         elif l.startswith('$'):
             raw_html = parseInsCommand(l, line_no, raw_html)
         elif l.startswith('# '):
@@ -28,7 +42,7 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
             raw_html = parseHtmlElement(l, line_no, raw_html, '! *', 'h3')
         elif l.startswith('-'):
             """ Create a new list with all of the lines with bullets, and then
-                parse them later """
+                parse them later. Start with current point. """
             bullet_list = [l]
 
             for j in islice(doc_iter, 0, None):
@@ -138,8 +152,6 @@ def parseInsCommand(l: str, line_no: int, raw_html: str) -> str:
         raw_html = gen.insertElementIntoHtml(raw_html, str(date.today()), 'p')
     elif (first == 'wi' or first == 'li') and (len(cmd) >= 2):
         raw_html = gen.insertImageIntoHtml(raw_html, cmd[1])
-    elif first == 'table':
-        print('TODO: table')
     else:
         print("[PARSER_ERR] Error on or around line {}, cound not determine insert command '${}'. Skipping this command.".format(line_no, first))
     return raw_html
