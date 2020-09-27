@@ -32,8 +32,11 @@ def insertElementIntoHtml(html: str, the_text: str, element: str) -> str:
     lower = html.split('</div></body>', 1)[1]
     doc, tag, text, line = Doc().ttl()
 
+    the_text = formatText(the_text)
+
     with tag(element):
-        text(the_text)
+        doc.asis(the_text)
+        #text(the_text)
     
     upper += doc.getvalue() + "</div></body>" + lower
     return (upper)
@@ -148,3 +151,30 @@ def generateTable(html: str, head: [str], rows: [str]) -> str:
     # Insert table into doc
     upper += doc.getvalue() + '</div></body>' + lower
     return indent(upper)
+
+def formatText(text: str) -> str:
+    # Look for bolded and italicized text (***)
+    text = textFormatter(text, '***', '<b><i>', '</i></b>')
+
+    # Look for bolded text (**)
+    text = textFormatter (text, '**', '<b>', '</b>')
+
+    # Look for italicized text (*)
+    text = textFormatter (text, '*', '<i>', '</i>')
+
+    # Look for underlined text (__)
+    text = textFormatter (text, '__', '<u>', '</u>')
+
+    # Look for strikethrough text
+    # TODO:
+
+    # Look for escaped text
+    # TODO:
+
+    return text
+
+def textFormatter(text: str, old: str, new1: str, new2: str) -> str:
+    while text.find(old) != -1:
+        text = text.replace(old, new1, 1)
+        text = text.replace(old, new2, 1)
+    return text

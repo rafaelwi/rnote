@@ -88,6 +88,14 @@ table, td {
     border-right-width: 1px;
 }
 
-th {
+th, b {
     font-weight: bold;
+}
+
+u {
+    text-decoration: solid underline 1px #000;
+}
+
+i {
+    font-style: italic;
 }
