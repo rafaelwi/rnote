@@ -67,27 +67,27 @@ ul ul ul {
     margin-bottom: -8px;
 }
 
-table {
-    display: table;
-    border-collapse: separate;
-    border-spacing: 2px;
-    border-color: black;
+table, td {
+    display: block;
+    padding-top: 2pt;
+
+    border-top-color: black;
+    border-top-style: solid;
+    border-top-width: 1px;
+
+    border-bottom-style: solid;
+    border-bottom-color: #000;
+    border-bottom-width: 1px;
+
+    border-left-style: solid;
+    border-left-color: #000;
+    border-left-width: 1px;
+
+    border-right-style: solid;
+    border-right-color: #000;
+    border-right-width: 1px;
 }
 
 th {
-	display: table-cell;
-    vertical-align: inherit;
     font-weight: bold;
-    text-align: center;
-}
-
-td {
-	display: table-cell;
-    vertical-align: inherit;
-}
-
-tr {
-    display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;
 }
