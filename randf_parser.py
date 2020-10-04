@@ -26,12 +26,13 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
             for j in islice(doc_iter, 0, None):
                 if j.startswith('-'):
                     table_list.append(j)
-                elif j == '$endtable':
+                elif j ==('$endtable'):
                     print('Successfully reached the end of the table')
                     line_no += len(table_list)
                     raw_html = gen.generateTable(raw_html, table_header, table_list)
+                    break
                 else:
-                    printf('[PARSER_ERR] Syntax error when processing list, expecting table row or $endtable')
+                    print('[PARSER_ERR] Syntax error when processing table, expecting table row or $endtable')
         elif l.startswith('$'):
             raw_html = parseInsCommand(l, line_no, raw_html)
         elif l.startswith('# '):

@@ -147,11 +147,9 @@ def generateTable(html: str, head: [str], rows: [str]) -> str:
 
     # Insert table into doc
     upper += doc.getvalue() + '</div></body>' + lower
-    return indent(upper)
+    return upper
 
 def formatText(text: str) -> str:
-    # TODO: Text formatting for table data, headers, inserts, etc.
-
     # Look for escaped text
     text = text.replace('\*', '&ast;')
     text = text.replace('\_', '&lowbar;')
