@@ -1,11 +1,11 @@
-# Rafael's Notetaking Document Format Specifications
-This document is intended to explain the syntax of RANDF files. There are three
-types of syntax: preprocessor commands, insert commands, and styling commands. 
-Preprocessor commands set the overall styling and appearance of the document. 
-All preprocessor commands are prefaced with `.pp`. Insert commands insert 
-styling elements into the document. All insert commands are prefaced with `$`. 
-Styling commands modify the appearance of the lines of the docuemnt. They are 
-prefaced with various symbols.
+# Rnote Format Specifications
+This document is intended to explain the syntax of rnote and rdoc files. There 
+are three types of syntax: preprocessor commands, insert commands, and styling 
+commands. Preprocessor commands set the overall styling and appearance of the 
+document. All preprocessor commands are prefaced with `.pp`. Insert commands 
+insert styling elements into the document. All insert commands are prefaced with
+`$`. Styling commands modify the appearance of the lines of the docuemnt. They 
+are prefaced with various symbols.
 
 ## Preprocessor Commands
 All preprocssor commands are prefaced with `.pp`
@@ -42,7 +42,23 @@ Sets the size of the document page.
 **Options**<br>
 letter [DEFAULT] - 8.5" x 11" sized pages<br>
 legal - 8.5" x 14" sized pages<br>
-A4 / a4 - 210mm x 297mm sized pages
+a4 - 210mm x 297mm sized pages<br>
+
+*Other options*<br>
+a0 - 841mm x 1189mm sized pages <br>
+a1 - 594mm x  841mm sized pages <br>
+a2 - 420mm x  594mm sized pages <br>
+a3 - 297mm x  420mm sized pages <br>
+a5 - 148mm x  210mm sized pages <br>
+a6 - 105mm x  148mm sized pages <br>
+b0 - 1000mm x 1414mm sized pages <br>
+b1 - 594mm x  841mm sized pages <br>
+b2 - 420mm x  594mm sized pages <br>
+b3 - 297mm x  420mm sized pages <br>
+b4 - 210mm x  297mm sized pages <br>
+b5 - 148mm x  210mm sized pages <br>
+b6 - 105mm x  148mm sized pages <br>
+elevenseventeen - 11" x 17" sized pages, tabloid size<br>
 
 <hr>
 
@@ -52,15 +68,6 @@ Sets the page orientation.
 **Options**<br>
 port / portrait / vert / verical [DEFAULT] - Orients the pages in a vertical manner<br>
 land / landscape / horz / horizontal - Orients the pages in a horizontal manner <br>
-
-<hr>
-
-`pgnum OnOrOff / pagenum OnOrOff`<br>
-Sets whether page numbers are on or off.
-
-**Options**<br>
-off [DEFAULT] - No page numbering<br>
-on - Pages are numbered
 
 <hr>
 
@@ -84,9 +91,10 @@ These commands style text in the document.
 | ! | Creates a section header | `! Chapter 1` | ✔ |
 | - | Creates a bullet point. Adding more increases the level of indentation. | `- This is a point`<br>`-- This is an indented point` | ✔ |
 | = | Creates a paragraph of text with no indentation. | `= This is a paragraph of text. Not a bullet point, this would not be indented when compiled.`| ✔ |
-| \*text\* | Italicizes text. | \*This text is italicized\* | ❌ |
-| \*\*text\*\* | Bolds text. | \*\*This text is bolded\*\* | ❌ |
-| \_\_text\_\_ | Underlines text. | \_\_This text is underlined\_\_ | ❌ |
+| \*text\* | Italicizes text. | \*This text is italicized\* | ✔ |
+| \*\*text\*\* | Bolds text. | \*\*This text is bolded\*\* | ✔ |
+| \_\_text\_\_ | Underlines text. | \_\_This text is underlined\_\_ | ✔ |
+| \~\~text\~\~ | Strikes out text. | \~\~This text is struck out\~\~| ✔ |
 
 <hr>
 

@@ -1,6 +1,5 @@
 .pp theme light
-.pp size a6
+.pp size a4
 .pp margin narrow
 .pp title Rambo
-.pp align horz
-.pp pgnum
+.pp align vert
