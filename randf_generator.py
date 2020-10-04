@@ -32,11 +32,8 @@ def insertElementIntoHtml(html: str, the_text: str, element: str) -> str:
     lower = html.split('</div></body>', 1)[1]
     doc, tag, text, line = Doc().ttl()
 
-    the_text = formatText(the_text)
-
     with tag(element):
-        doc.asis(the_text)
-        #text(the_text)
+        doc.asis(formatText(the_text))
     
     upper += doc.getvalue() + "</div></body>" + lower
     return (upper)
@@ -98,7 +95,7 @@ def generateBulletPoints(html: str, bullets: list):
         with tag('li'):
             b = re.sub('^(-+)', '', b)
             b = b.strip()
-            text(b)
+            doc.asis(formatText(b))
 
     # Add in the remaining closing ul tags
     for i in range(indent_lvl):
@@ -136,17 +133,17 @@ def generateTable(html: str, head: [str], rows: [str]) -> str:
         with tag('tr'):
             for i in head:
                 with tag('th'):
-                    text(i.strip())
+                    doc.asis(formatText(i.strip()))
         
         # Generate content in table
         for r in rows:
             with tag('tr'):
                 r = r.split(';')
                 with tag('td'):
-                    text(r[0][2:])
+                    doc.asis(formatText(r[0][2:]))
                 for s in r[1:]:
                     with tag('td'):
-                        text(s.strip())
+                        doc.asis(formatText(s.strip()))
 
     # Insert table into doc
     upper += doc.getvalue() + '</div></body>' + lower
