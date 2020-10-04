@@ -99,3 +99,7 @@ u {
 i {
     font-style: italic;
 }
+
+del {
+    text-decoration: line-through;
+}

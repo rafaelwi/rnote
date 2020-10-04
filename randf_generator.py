@@ -153,27 +153,33 @@ def generateTable(html: str, head: [str], rows: [str]) -> str:
     return indent(upper)
 
 def formatText(text: str) -> str:
+    # TODO: Text formatting for table data, headers, inserts, etc.
+
+    # Look for escaped text
+    text = text.replace('\*', '&ast;')
+    text = text.replace('\_', '&lowbar;')
+    text = text.replace('\~', '&tilde;')
+
     # Look for bolded and italicized text (***)
     text = textFormatter(text, '***', '<b><i>', '</i></b>')
 
     # Look for bolded text (**)
-    text = textFormatter (text, '**', '<b>', '</b>')
+    text = textFormatter(text, '**', '<b>', '</b>')
 
     # Look for italicized text (*)
-    text = textFormatter (text, '*', '<i>', '</i>')
+    text = textFormatter(text, '*', '<i>', '</i>')
 
     # Look for underlined text (__)
-    text = textFormatter (text, '__', '<u>', '</u>')
+    text = textFormatter(text, '__', '<u>', '</u>')
 
     # Look for strikethrough text
-    # TODO:
-
-    # Look for escaped text
-    # TODO:
-
+    text = textFormatter(text, '~~', '<del>', '</del>')
     return text
 
 def textFormatter(text: str, old: str, new1: str, new2: str) -> str:
+    if text.find(old) != -1 and text.count(old) % 2 == 1:
+        text += old
+        print('WARNING: Current line does not have escaped formatter, escaping formatter at end of line')
     while text.find(old) != -1:
         text = text.replace(old, new1, 1)
         text = text.replace(old, new2, 1)
