@@ -1,7 +1,7 @@
 # RNote Compiled Document Format
 RNote is a simple, compiled document format intended for taking bullet-point notes.
 
-![An example document](https://github.com/rafaelwi/rnote/raw/master/media/DEMO_OCT_4_2020.png "An example document")
+![An example document](https://github.com/rafaelwi/rnote/raw/master/img/DEMO_OCT_4_2020.png "An example document")
 
 ## Features
 - Easy to learn and use syntax designed for taking notes quickly
