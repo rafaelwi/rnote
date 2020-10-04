@@ -67,3 +67,39 @@ ul ul ul {
     margin-bottom: -8px;
 }
 
+table, td {
+    display: block;
+    padding-top: 2pt;
+
+    border-top-color: black;
+    border-top-style: solid;
+    border-top-width: 1px;
+
+    border-bottom-style: solid;
+    border-bottom-color: #000;
+    border-bottom-width: 1px;
+
+    border-left-style: solid;
+    border-left-color: #000;
+    border-left-width: 1px;
+
+    border-right-style: solid;
+    border-right-color: #000;
+    border-right-width: 1px;
+}
+
+th, b {
+    font-weight: bold;
+}
+
+u {
+    text-decoration: solid underline 1px #000;
+}
+
+i {
+    font-style: italic;
+}
+
+del {
+    text-decoration: line-through;
+}

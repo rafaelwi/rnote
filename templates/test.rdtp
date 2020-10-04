@@ -1,0 +1,5 @@
+.pp theme light
+.pp size a4
+.pp margin narrow
+.pp title Rambo
+.pp align vert

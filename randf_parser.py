@@ -16,8 +16,23 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
         if l.startswith('//') or l == '':
             print(str(line_no) + ": Encountered a comment or blank line, skipping")
             continue
-        if l.startswith('.pp'):
+        elif l.startswith('.pp'):
             raw_html = parsePpCommand(l, line_no, style, raw_html)
+        elif l.startswith('$table'):
+            print('Inserting table')
+            table_header = ' '.join(l.split()[1:]).split(';')
+            table_list = []
+
+            for j in islice(doc_iter, 0, None):
+                if j.startswith('-'):
+                    table_list.append(j)
+                elif j ==('$endtable'):
+                    print('Successfully reached the end of the table')
+                    line_no += len(table_list)
+                    raw_html = gen.generateTable(raw_html, table_header, table_list)
+                    break
+                else:
+                    print('[PARSER_ERR] Syntax error when processing table, expecting table row or $endtable')
         elif l.startswith('$'):
             raw_html = parseInsCommand(l, line_no, raw_html)
         elif l.startswith('# '):
@@ -27,20 +42,17 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
         elif l.startswith('! '):
             raw_html = parseHtmlElement(l, line_no, raw_html, '! *', 'h3')
         elif l.startswith('-'):
-            print(str(line_no) + ": TODO: parsing bullet: " + l)
             """ Create a new list with all of the lines with bullets, and then
-                parse them later """
+                parse them later. Start with current point. """
             bullet_list = [l]
 
             for j in islice(doc_iter, 0, None):
-                print("element: " + j)
                 if j.startswith('-'):
                     bullet_list.append(j)
                 else:
                     break
             
             # Process this into meaningful document :)
-            print("starting: " + l + "\nresult: " + str(bullet_list))
             line_no += len(bullet_list)
             raw_html = gen.generateBulletPoints(raw_html, bullet_list)
         elif l.startswith('= '):
@@ -57,21 +69,73 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
 
     if cmd[0] == 'theme':
         style.theme = cmd[1]
-    elif cmd[0] == 'margin':
-        print('TODO: set margin')
+    elif cmd[0] == 'margin' or cmd[0] == 'margins':
+        # Determine the margin size
+        new_margins = cmd[1]
+        style.margin = new_margins
+        print('Setting margins to {}'.format(new_margins))
+        if new_margins == 'normal':
+            style.topBottom = style.leftRight = 2
+            raw_html = gen.generatePageSize(raw_html, style)
+        elif new_margins == 'narrow':
+            style.topBottom = style.leftRight = 1
+            raw_html = gen.generatePageSize(raw_html, style)
+        elif new_margins == 'moderate':
+            style.topBottom, style.leftRight = 1, 0.75
+            raw_html = gen.generatePageSize(raw_html, style)
+        elif new_margins == 'wide':
+            style.topBottom, style.leftRight = 1, 2
+            raw_html = gen.generatePageSize(raw_html, style)
+        else:
+            print('[PARSER_ERR] Error on or around line {}, could not determine margin size, defaulting to normal margins.\n').format(line_no)
+            style.margin = 'normal'
     elif cmd[0] == 'size':
-        print('TODO: set size')
+        new_size = cmd[1].lower()
+
+        # Build list of allowed sizes
+        allowed_sizes = ['letter', 'legal', 'elevenseventeen']
+        for i in range(7):
+            allowed_sizes.append('a{}'.format(i))
+            allowed_sizes.append('b{}'.format(i))
+        
+        # Check if size is allowed
+        if new_size in allowed_sizes:
+            style.pagesize = new_size
+            raw_html = gen.generatePageSize(raw_html, style)
+        else:
+            print('[PARSER_ERR] Error on or around line {}, could not determine page size, defaulting to letter (8.5" x 11")\n').format(line_no)
+            style.pagesize = 'letter'
     elif cmd[0] == 'align' or cmd[0] == 'orientation':
-        print('TODO: set align')
+        print('Setting orientation')
+        new_orient = cmd[1].lower()
+
+        # Set orientation
+        if new_orient in ['port', 'portrait', 'vert','verical']:
+            style.orientation = 'portrait'
+            raw_html = gen.generatePageSize(raw_html, style)
+        elif new_orient in ['land', 'landscape', 'horz', 'horizontal']:
+            style.orientation = 'landscape'
+            raw_html = gen.generatePageSize(raw_html, style)
+        else:
+            print('[PARSER_ERR] Error on or around line {}, could not determine page orientation, defaulting to portrait').format(line_no)
+            style.orientation = 'portrait'
     elif cmd[0] == 'pgnum':
-        print('TODO: set pgnum')
+        # TODO: PAGE NUMBERS
+        print("Feature '.pp pgnum' has not been implemented yet!")
     elif cmd[0] == 'title':
         raw_html = gen.insertDocTitleIntoHtml(raw_html, re.sub('^title?', '', l))
     elif cmd[0] == 'template' or cmd[0] == 'temp' or cmd[0] == 'templ8':
-        print('TODO: set template')
+        print('Setting template')
+        filename = cmd[1]
+        pp_commands = []
+        with open('templates/' + filename + '.rdtp') as f:
+            pp_commands = f.readlines()
+            #NOTE: It may be more efficient to read one line in at a time and do its instruction
+        
+        for cmd in pp_commands:
+            raw_html = parsePpCommand(cmd.strip(), line_no, style, raw_html)
     else:
         print("[PARSER_ERR] Error on or around line {}, could not determine preprocessor command '{}'. Skipping this command.".format(line_no, cmd[0]))
-    
     return raw_html
 
 def parseInsCommand(l: str, line_no: int, raw_html: str) -> str:
@@ -83,18 +147,17 @@ def parseInsCommand(l: str, line_no: int, raw_html: str) -> str:
     if first == 'br':
         print('line break')
         raw_html = gen.insertElementIntoHtml(raw_html, '', 'br')
+    elif first == 'hr':
+        raw_html = gen.insertElementIntoHtml(raw_html, '', 'hr')
     elif first == 'date':
         raw_html = gen.insertElementIntoHtml(raw_html, str(date.today()), 'p')
     elif (first == 'wi' or first == 'li') and (len(cmd) >= 2):
         raw_html = gen.insertImageIntoHtml(raw_html, cmd[1])
-    elif first == 'table':
-        print('TODO: table')
     else:
         print("[PARSER_ERR] Error on or around line {}, cound not determine insert command '${}'. Skipping this command.".format(line_no, first))
     return raw_html
 
-def parseHtmlElement(l: str, line_no: int, raw_html: str, pattern: str, 
-    element: str) -> str:
+def parseHtmlElement(l: str, line_no: int, raw_html: str, pattern: str, element: str) -> str:
     l = re.sub(pattern, '', l)
 
     # Before adding the line, see if there is anything that needs to be parsed
