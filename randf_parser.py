@@ -27,7 +27,6 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
                 if j.startswith('-'):
                     table_list.append(j)
                 elif j ==('$endtable'):
-                    print('Successfully reached the end of the table')
                     line_no += len(table_list)
                     raw_html = gen.generateTable(raw_html, table_header, table_list)
                     break
@@ -42,8 +41,8 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
         elif l.startswith('! '):
             raw_html = parseHtmlElement(l, line_no, raw_html, '! *', 'h3')
         elif l.startswith('-'):
-            """ Create a new list with all of the lines with bullets, and then
-                parse them later. Start with current point. """
+            # Create a new list with all of the lines with bullets, and then
+            # parse them later. Start with current point.
             bullet_list = [l]
 
             for j in islice(doc_iter, 0, None):
@@ -70,25 +69,24 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
     if cmd[0] == 'theme':
         style.theme = cmd[1]
     elif cmd[0] == 'margin' or cmd[0] == 'margins':
-        # Determine the margin size
         new_margins = cmd[1]
         style.margin = new_margins
+
+        # Set the margins
         print('Setting margins to {}'.format(new_margins))
         if new_margins == 'normal':
             style.topBottom = style.leftRight = 2
-            raw_html = gen.generatePageSize(raw_html, style)
         elif new_margins == 'narrow':
             style.topBottom = style.leftRight = 1
-            raw_html = gen.generatePageSize(raw_html, style)
         elif new_margins == 'moderate':
             style.topBottom, style.leftRight = 1, 0.75
-            raw_html = gen.generatePageSize(raw_html, style)
         elif new_margins == 'wide':
             style.topBottom, style.leftRight = 1, 2
-            raw_html = gen.generatePageSize(raw_html, style)
         else:
             print('[PARSER_ERR] Error on or around line {}, could not determine margin size, defaulting to normal margins.\n').format(line_no)
+            style.topBottom = style.leftRight = 2
             style.margin = 'normal'
+        raw_html = gen.generatePageSize(raw_html, style)
     elif cmd[0] == 'size':
         new_size = cmd[1].lower()
 
@@ -101,10 +99,10 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
         # Check if size is allowed
         if new_size in allowed_sizes:
             style.pagesize = new_size
-            raw_html = gen.generatePageSize(raw_html, style)
         else:
             print('[PARSER_ERR] Error on or around line {}, could not determine page size, defaulting to letter (8.5" x 11")\n').format(line_no)
             style.pagesize = 'letter'
+        raw_html = gen.generatePageSize(raw_html, style)
     elif cmd[0] == 'align' or cmd[0] == 'orientation':
         print('Setting orientation')
         new_orient = cmd[1].lower()
@@ -112,16 +110,12 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
         # Set orientation
         if new_orient in ['port', 'portrait', 'vert','verical']:
             style.orientation = 'portrait'
-            raw_html = gen.generatePageSize(raw_html, style)
         elif new_orient in ['land', 'landscape', 'horz', 'horizontal']:
             style.orientation = 'landscape'
-            raw_html = gen.generatePageSize(raw_html, style)
         else:
             print('[PARSER_ERR] Error on or around line {}, could not determine page orientation, defaulting to portrait').format(line_no)
             style.orientation = 'portrait'
-    elif cmd[0] == 'pgnum':
-        # TODO: PAGE NUMBERS
-        print("Feature '.pp pgnum' has not been implemented yet!")
+        raw_html = gen.generatePageSize(raw_html, style)
     elif cmd[0] == 'title':
         raw_html = gen.insertDocTitleIntoHtml(raw_html, re.sub('^title?', '', l))
     elif cmd[0] == 'template' or cmd[0] == 'temp' or cmd[0] == 'templ8':
@@ -130,13 +124,13 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
         pp_commands = []
         with open('templates/' + filename + '.rdtp') as f:
             pp_commands = f.readlines()
-            #NOTE: It may be more efficient to read one line in at a time and do its instruction
-        
+
         for cmd in pp_commands:
             raw_html = parsePpCommand(cmd.strip(), line_no, style, raw_html)
     else:
         print("[PARSER_ERR] Error on or around line {}, could not determine preprocessor command '{}'. Skipping this command.".format(line_no, cmd[0]))
     return raw_html
+
 
 def parseInsCommand(l: str, line_no: int, raw_html: str) -> str:
     # Remove the $ part of the string, then split it into a list
@@ -144,11 +138,9 @@ def parseInsCommand(l: str, line_no: int, raw_html: str) -> str:
     cmd = l.split()
     first = cmd[0]
 
-    if first == 'br':
+    if first == 'br' or first == 'hr':
         print('line break')
-        raw_html = gen.insertElementIntoHtml(raw_html, '', 'br')
-    elif first == 'hr':
-        raw_html = gen.insertElementIntoHtml(raw_html, '', 'hr')
+        raw_html = gen.insertElementIntoHtml(raw_html, '', first)
     elif first == 'date':
         raw_html = gen.insertElementIntoHtml(raw_html, str(date.today()), 'p')
     elif (first == 'wi' or first == 'li') and (len(cmd) >= 2):
@@ -157,13 +149,30 @@ def parseInsCommand(l: str, line_no: int, raw_html: str) -> str:
         print("[PARSER_ERR] Error on or around line {}, cound not determine insert command '${}'. Skipping this command.".format(line_no, first))
     return raw_html
 
+
 def parseHtmlElement(l: str, line_no: int, raw_html: str, pattern: str, element: str) -> str:
     l = re.sub(pattern, '', l)
 
     # Before adding the line, see if there is anything that needs to be parsed
-    # by the insert command thing
+    # by the insert command
     l = re.sub('\$date', str(date.today()), l)
-
+    l = l.replace('\*', '&ast;')
+    l = l.replace('\_', '&lowbar;')
+    l = l.replace('\~', '&tilde;')
+    l = textFormatter(l, '***', '<b><i>', '</i></b>')
+    l = textFormatter(l, '**', '<b>', '</b>')
+    l = textFormatter(l, '*', '<i>', '</i>')
+    l = textFormatter(l, '__', '<u>', '</u>')
+    l = textFormatter(l, '~~', '<del>', '</del>')
     raw_html = gen.insertElementIntoHtml(raw_html, l, element)
     return raw_html
 
+
+def textFormatter(text: str, old: str, new1: str, new2: str) -> str:
+    if text.find(old) != -1 and text.count(old) % 2 == 1:
+        text += old
+        print('WARNING: Current line does not have escaped formatter, escaping formatter at end of line')
+    while text.find(old) != -1:
+        text = text.replace(old, new1, 1)
+        text = text.replace(old, new2, 1)
+    return text

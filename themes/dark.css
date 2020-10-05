@@ -1,13 +1,17 @@
-@page {
     /* Note: the best size for the background images with letter size paper is 
        1235 x 1600. I don't know why but with that sizing there are no issues 
        with extra whitespace on the page. */
+/*@page {
     background-image: url('themes/dark.jpg');
     size: letter;
 
-    @frame {
+    @frame a {
         margin: 1in;
     }
+}*/
+
+html {
+    color: #000;
 }
 
 body {

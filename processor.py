@@ -1,5 +1,4 @@
 # RANDF Processor: Takes a raw file and converts it to a compiled document.
-
 import randf_cliargs as cliargs
 import randf_generator as gen
 import randf_parser as parser
@@ -53,4 +52,3 @@ f.close()
 gen.convertHtmlToPdf(raw_html, style, out_file)
 print("[RANDF] File {} successfully converted to PDF {}".format(args.input, out_file))
 print("[RANDF] Process took {:.4f} seconds".format(time.time() - start_time))
-### End of main program ###
