@@ -1,17 +1,15 @@
-# RANDF Processor: Takes a raw file and converts it to a compiled document.
+# RNote Processor
 import randf_cliargs as cliargs
 import randf_generator as gen
 import randf_parser as parser
 import randf_styling as sty
+import cfg
 
 import argparse
 import sys
 import os
 import time
 from xhtml2pdf import pisa
-
-VERBOSE = False
-DEBUG = False
 
 if __name__ == '__main__':
     start_time = time.time()
@@ -29,10 +27,10 @@ if __name__ == '__main__':
 
     if args.debug: 
         print('== Debugging has been turned on ==')
-        DEBUG = VERBOSE = True
+        cfg.DEBUG = cfg.VERBOSE = True
     if args.verbose: 
         print('== Verbosity has been turned on ==')
-        VERBOSE = True
+        cfg.VERBOSE = True
 
     if args.input: print("[RNOTE] Input file: " + args.input)
     else:
@@ -50,25 +48,25 @@ if __name__ == '__main__':
         sys.exit(-2)
 
     # Generate the middle-man HTML file that will be converted to PDF
-    if VERBOSE: print('[INFO] Generating middle-man file')
+    if cfg.VERBOSE: print('[INFO] Generating middle-man file')
     raw_html = gen.generateHtmlHeader()
 
     # Read the file, then parse it
-    if VERBOSE: print('[INFO] Reading input file')
+    if cfg.VERBOSE: print('[INFO] Reading input file')
     doc = [line.rstrip('\n') for line in open(args.input)]
     style = sty.Styler()
-    if VERBOSE: print('[INFO] Parsing input file')
+    if cfg.VERBOSE: print('[INFO] Parsing input file')
     raw_html = parser.parseRNoteDoc(doc, style, raw_html)
 
     # Write the html to a temp file
-    if DEBUG:
+    if cfg.DEBUG:
         print('[DBUG] Writing middle-man file to a.html')
         f = open("a.html", "w")
         f.write(raw_html)
         f.close()
 
     # Write to PDF
-    if VERBOSE: print('[INFO] Writing to output file')
+    if cfg.VERBOSE: print('[INFO] Writing to output file')
     gen.convertHtmlToPdf(raw_html, style, out_file)
     print("[RNOTE] File {} successfully converted to PDF {}".format(args.input, out_file))
     print("[RNOTE] Process took {:.4f} seconds".format(time.time() - start_time))
