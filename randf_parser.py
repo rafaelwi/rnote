@@ -5,7 +5,7 @@ import re
 from datetime import date
 from itertools import islice
 
-def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
+def parseRNoteDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
     line_no = 0
     doc_iter = iter(doc)
 

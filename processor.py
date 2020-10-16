@@ -10,6 +10,8 @@ import os
 import time
 from xhtml2pdf import pisa
 
+VERBOSE = False
+DEBUG = False
 
 if __name__ == '__main__':
     start_time = time.time()
@@ -21,13 +23,24 @@ if __name__ == '__main__':
     args = arg_parser.parse_args()
 
     # Get the command line arguements
-    if args.input: print("Input file: " + args.input)
+    if args.about:
+        print('About information for RNote')
+        sys.exit()
+
+    if args.debug: 
+        print('== Debugging has been turned on ==')
+        DEBUG = VERBOSE = True
+    if args.verbose: 
+        print('== Verbosity has been turned on ==')
+        VERBOSE = True
+
+    if args.input: print("[RNOTE] Input file: " + args.input)
     else:
         print("[ERR!] No input document given, exiting...")
         sys.exit(-1)
 
     if args.output:
-        print("Output file: " + args.output)
+        print("[RNOTE] Output file: " + args.output)
         out_file = args.output
     else: print("[WARN] No output document given, defaulting to 'out.pdf'")
 
@@ -37,23 +50,28 @@ if __name__ == '__main__':
         sys.exit(-2)
 
     # Generate the middle-man HTML file that will be converted to PDF
+    if VERBOSE: print('[INFO] Generating middle-man file')
     raw_html = gen.generateHtmlHeader()
 
     # Read the file, then parse it
+    if VERBOSE: print('[INFO] Reading input file')
     doc = [line.rstrip('\n') for line in open(args.input)]
     style = sty.Styler()
-    raw_html = parser.parseRandfDoc(doc, style, raw_html)
+    if VERBOSE: print('[INFO] Parsing input file')
+    raw_html = parser.parseRNoteDoc(doc, style, raw_html)
 
     # Write the html to a temp file
-    # TODO: Put this behind debug check
-    f = open("a.html", "w")
-    f.write(raw_html)
-    f.close()
+    if DEBUG:
+        print('[DBUG] Writing middle-man file to a.html')
+        f = open("a.html", "w")
+        f.write(raw_html)
+        f.close()
 
     # Write to PDF
+    if VERBOSE: print('[INFO] Writing to output file')
     gen.convertHtmlToPdf(raw_html, style, out_file)
-    print("[RANDF] File {} successfully converted to PDF {}".format(args.input, out_file))
-    print("[RANDF] Process took {:.4f} seconds".format(time.time() - start_time))
+    print("[RNOTE] File {} successfully converted to PDF {}".format(args.input, out_file))
+    print("[RNOTE] Process took {:.4f} seconds".format(time.time() - start_time))
 else:
-    print('Warning! Rnote is not meant to be run as a module!')
+    print('Warning! RNote is not meant to be run as a module!')
     sys.exit()
