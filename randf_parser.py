@@ -50,7 +50,7 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
                     bullet_list.append(j)
                 else:
                     break
-            
+
             # Process this into meaningful document :)
             line_no += len(bullet_list)
             raw_html = gen.generateBulletPoints(raw_html, bullet_list)
@@ -59,7 +59,7 @@ def parseRandfDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
         else:
             print("[PARSER_ERR] Error on or around line {}, could not determine formatting on the following line:\n  >> {}".format(line_no, l))
     return raw_html
-        
+
 
 def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> str:
     # Remove the .pp part of the string, then split it into a list
@@ -95,7 +95,7 @@ def parsePpCommand(l: str, line_no: int, style: sty.Styler, raw_html: str) -> st
         for i in range(7):
             allowed_sizes.append('a{}'.format(i))
             allowed_sizes.append('b{}'.format(i))
-        
+
         # Check if size is allowed
         if new_size in allowed_sizes:
             style.pagesize = new_size
