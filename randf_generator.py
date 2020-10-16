@@ -37,6 +37,22 @@ def generateHtmlHeader() -> str:
 
 
 def insertElementIntoHtml(html: str, the_text: str, element: str) -> str:
+    """Inserts a simple HTML element into the document
+
+    Parameters
+    ----------
+    html
+        The HTML file that will get the new element
+    the_text
+        Text value of the new element
+    element
+        New HTML element to insert
+
+    Returns
+    -------
+    str
+        The HTML document with new element inserted
+    """
     doc, tag, text, line = Doc().ttl()
     with tag(element):
         if cfg.VERBOSE: print('[INFO] Inserting {} element'.format(element))
@@ -46,12 +62,43 @@ def insertElementIntoHtml(html: str, the_text: str, element: str) -> str:
 
 
 def insertDocTitleIntoHtml(html: str, the_title: str) -> str:
+    """Sets the title of the document
+
+    Parameters
+    ---------
+    html
+        The document that will get the new title
+
+    the_title
+        New title for the document
+
+    Returns
+    -------
+    str
+        The HTML document with the new document title
+    """
     upper, lower = html.split('</title>', 1)[0], html.split('</title>', 1)[1]
     if cfg.VERBOSE: print('[INFO] Setting new document title')
     return upper + the_title + '</title>' + lower
 
 
 def insertImageIntoHtml(html: str, img: str) -> str:
+    """Inserts an image into the document. Despite being labeled differently,
+    $wi and $li use the same function.
+
+    Parameters
+    ----------
+    html
+        The document that will get the new image
+
+    img
+        Path or URL to the new image
+
+    Returns
+    -------
+    str
+        The HTML document with the new image
+    """
     doc, tag, text, line = Doc().ttl()
     doc.stag('img', src=img)
     upper, lower = html.split('</div></body>', 1)[0], html.split('</div></body>', 1)[1]
@@ -60,20 +107,52 @@ def insertImageIntoHtml(html: str, img: str) -> str:
 
 
 def convertHtmlToPdf(raw_html: str, style: sty.Styler, out_file: str) -> bool:
+    """Converts HTML middle-man document into beautiful PDF
+
+    Parameters
+    ----------
+    raw_html
+        The HTML of the document to be converted
+    
+    style
+        Styler object that contains CSS rules for the HTML document
+
+    out_file
+        Path to the new PDF document
+
+    Returns
+    -------
+    bool
+        True if conversion was successful, False otherwise
+    """
     result_file = open(out_file, "w+b")
     status = pisa.CreatePDF(raw_html, dest=result_file, default_css=style.theme, debug=1)
     result_file.close()
     return status
 
 
-def generateBulletPoints(html: str, bullets: list):
+def generateBulletPoints(html: str, bullets: list) -> str:
+    """Generates bullet point list for a document
+
+    Parameters
+    ----------
+    html
+        The HTML document to get the new bullet list
+    
+    bullets
+        List of lines that contain the bullets
+
+    Returns
+    -------
+    str
+        The HTML document with new bullet list
+
+    """
     doc, tag, text, line = Doc().ttl()
     first_line = bullets[0]
 
-    # Count the number of dashes in the first indent level
+    # Count the indent level and set it for the first line
     original_indent_lvl = first_line.split()[0].count('-')
-
-    # Create the level of indent that we need for the first line
     doc.asis('<ul>' * original_indent_lvl)
 
     for b in bullets:
@@ -98,16 +177,29 @@ def generateBulletPoints(html: str, bullets: list):
             b = b.strip()
             doc.asis(b)
 
-    # Add in the remaining closing ul tags
+    # Add in the remaining closing ul tags and add the list to the HTML
     doc.asis('</ul>' * original_indent_lvl)
-
-    # Add new list to the html and return
     if cfg.VERBOSE: print('[INFO] Adding list')
     upper, lower = html.split('</div></body>', 1)[0], html.split('</div></body>', 1)[1]
     return upper + doc.getvalue() + "</div></body>" + lower
 
 
 def generatePageSize(html: str, style: sty.Styler) -> str:
+    """Sets the page size of the document
+
+    Parameters
+    ----------
+    html
+        The HTML document that will have its page size changed
+
+    style
+        Styler object that contains new page size information
+
+    Returns
+    -------
+    str
+        The HTML document with the new page size
+    """
     doc, tag, text, line = Doc().ttl()
     style.width, style.height = 1, 1
     upper, lower = html.split('/*EndOf@pageManualStyling*/}', 1)[0], html.split('/*EndOf@pageManualStyling*/}', 1)[1]
@@ -118,6 +210,24 @@ def generatePageSize(html: str, style: sty.Styler) -> str:
 
 
 def generateTable(html: str, head: [str], rows: [str]) -> str:
+    """Generates a table to insert into the document
+
+    Parameters
+    ----------
+    html
+        HTML document that will get the new table
+
+    head
+        Header row of the new table
+
+    rows
+        Body rows of the new table
+
+    Returns
+    -------
+    str
+        The HTML document with the new table
+    """
     doc, tag, text, line = Doc().ttl()
 
     # Generate table header

@@ -171,7 +171,7 @@ def parseHtmlElement(l: str, line_no: int, raw_html: str, pattern: str, element:
 def textFormatter(text: str, old: str, new1: str, new2: str) -> str:
     if text.find(old) != -1 and text.count(old) % 2 == 1:
         text += old
-        print('WARNING: Current line does not have escaped formatter, escaping formatter at end of line')
+        print('[WARN] Current line does not have escaped formatter, escaping formatter at end of line')
     while text.find(old) != -1:
         text = text.replace(old, new1, 1)
         text = text.replace(old, new2, 1)
