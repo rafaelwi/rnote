@@ -58,16 +58,7 @@ class Styler:
         # Validate the CSS for the document and set the CSS if it is valid
         verifier = tinycss.make_parser('page3')
         parsed_contents = verifier.parse_stylesheet(new_theme)
-        self._theme = new_theme
-
-        """
-        if parsed_contents.errors == []:
-            self._theme = new_theme
-        else:
-            print('[PARSER_ERR] {} errors were encountered when attempting to parse the stylesheet. The following errors are:'.format(len(parsed_contents.errors)))
-            for i in parsed_contents.errors:
-                print("  {}".format(i))
-        """                
+        self._theme = new_theme              
 
     @property
     def margin(self):
@@ -106,7 +97,6 @@ class Styler:
         self._pagesize = new_pagesize
         self._height = 1
         self._width = 1
-
 
     @property
     def orientation(self):
@@ -150,6 +140,7 @@ class Styler:
 
     @width.setter
     def width(self, a):
+        """ Sets the width of the document based on orientation """
         if self._orientation == 'portrait':
             page_width = (self.pageDim[self._pagesize]).width
             self._width = page_width - (2 * self._left)
@@ -164,6 +155,7 @@ class Styler:
     
     @height.setter
     def height(self, a):
+        """ Sets the height of the document based on orientation """
         if self._orientation == 'portrait':
             page_height = (self.pageDim[self._pagesize]).height
             self._height = page_height - (2 * self._top)
