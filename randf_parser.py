@@ -7,7 +7,26 @@ import re
 from datetime import date
 from itertools import islice
 
-def parseRNoteDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
+def parseRNoteDoc(doc: [str], style: sty.Styler, raw_html: str) -> str:
+    """Parses an input document into an HTML document to later be converted into
+    a PDF.
+
+    Parameters
+    ----------
+    doc
+        List of lines from the input document
+
+    style
+        Styler object containing style information about the document
+
+    raw_html
+        The HTML of the document
+
+    Returns
+    -------
+    str
+        The HTML document that will be turned into a PDF
+    """
     cfg.LINE_NO = 0
     doc_iter = iter(doc)
 
@@ -71,6 +90,24 @@ def parseRNoteDoc(doc: list, style: sty.Styler, raw_html: str) -> str:
 
 
 def parsePpCommand(l: str, style: sty.Styler, raw_html: str) -> str:
+    """Parses commands that are prefaced with .pp
+
+    Parameters
+    ----------
+    l
+        Command to be parsed
+    
+    style
+        Styler object containing styling information for document
+
+    raw_html
+        HTML of the document being created
+
+    Returns
+    -------
+    str
+        The HTML document with new .pp attribute
+    """
     # Remove the .pp part of the string, then split it into a list
     l = re.sub('.pp *', '', l)
     cmd = l.split()
@@ -142,6 +179,22 @@ def parsePpCommand(l: str, style: sty.Styler, raw_html: str) -> str:
 
 
 def parseInsCommand(l: str, raw_html: str) -> str:
+    """Parses commands that are prefaced with $
+
+    Parameters
+    ----------
+    l
+        Command to be parsed
+
+    raw_html
+        HTML of the document being created
+
+    Returns
+    -------
+    str
+        The HTML document with new $ attribute
+    """
+
     # Remove the $ part of the string, then split it into a list
     l = re.sub('\$', '', l)
     cmd = l.split()
@@ -161,6 +214,27 @@ def parseInsCommand(l: str, raw_html: str) -> str:
 
 
 def parseHtmlElement(l: str, raw_html: str, pattern: str, element: str) -> str:
+    """Parses a HTML element
+
+    Parameters
+    ----------
+    l
+        Line to be parsed
+
+    raw_html
+        HTML of the document being created
+
+    pattern
+        Regex pattern that is used to search for the element to be added
+
+    element
+        HTML element that will be added
+
+    Returns
+    -------
+    str
+        The HTML document with new HTML element
+    """
     if cfg.VERBOSE: print('[INFO] Parsing HTML element')
     l = re.sub(pattern, '', l)
 
@@ -172,7 +246,20 @@ def parseHtmlElement(l: str, raw_html: str, pattern: str, element: str) -> str:
     raw_html = gen.insertElementIntoHtml(raw_html, l, element)
     return raw_html
 
+
 def formatText(l: str) -> str:
+    """ Formats text for styling (bold, italics, etc.)
+
+    Parameters
+    ----------
+    l
+        Line to be formatted
+
+    Returns
+    -------
+    str
+        The formatted line
+    """
     l = re.sub('\$date', str(date.today()), l)
     l = l.replace('\*', '&ast;')
     l = l.replace('\_', '&lowbar;')
@@ -186,6 +273,27 @@ def formatText(l: str) -> str:
 
 
 def textFormatter(text: str, old: str, new1: str, new2: str) -> str:
+    """Generic function that formats text
+
+    Parameters
+    ----------
+    text
+        Text to format
+
+    old
+        Symbol to look for
+
+    new1
+        Opening symbol that will replace
+
+    new2
+        Closing symbol that will replace
+
+    Returns
+    -------
+    str
+        The new formatted text
+    """
     if text.find(old) != -1 and text.count(old) % 2 == 1:
         text += old
         print('[WARN] Line {} does not have escaped formatter, escaping formatter at end of line'.format(cfg.LINE_NO))
