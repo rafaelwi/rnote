@@ -19,6 +19,8 @@ RNote is a simple, compiled document format intended for taking bullet-point not
 This will install the necessary libraries  for RNote to work
 3. Open up your favourite text editor and begin writing documents. [Take a look at the format spec sheet to learn the syntax.](https://github.com/rafaelwi/rnote/blob/master/spec.md)<br>
 4. When you're done writing your document, simply enter the rnote directory and run the processor to generate your document into a PDF<br>
-```python3 processor.py -i INPUT_FILE.rnote -o OUTPUT_FILE.pdf```
+```./rnote -i INPUT_FILE.rnote -o OUTPUT_FILE.pdf```
+
+NOTE: If RNote does not run, please run `chmod +x rnote` and try again.
 
 Contgratulations! If all has gone well, you have successfully created your first RNote document!
