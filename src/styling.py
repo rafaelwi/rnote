@@ -24,7 +24,7 @@ class Styler:
             'legal': pd.PageDimensions(21.59, 35.56),
             'letter': pd.PageDimensions(27.94, 43.1)
         }
-        self.theme = 'light'
+        self.theme = 'simple'
         self.margin = 'normal'
         self.top = 2.0
         self.left = 2.0
@@ -45,7 +45,7 @@ class Styler:
     def theme(self, theme_fn):
         """ Sets a new theme for the document """
         # Check if the file passed in exists
-        filename = "themes/" + theme_fn + ".css"
+        filename = "themes/" + theme_fn + '/' + theme_fn + ".css"
         if (os.path.exists(filename) == False):
             print("[PARSER_ERR] Could not find theme file '{}'. Please make sure that the theme is in the theme/ folder. Falling back on default theme.".format(filename))
             return

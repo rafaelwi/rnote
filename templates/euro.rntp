@@ -1,0 +1,5 @@
+.pp theme modern
+.pp size a4
+.pp margin normal
+.pp title My Document
+.pp align vert

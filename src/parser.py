@@ -170,7 +170,7 @@ def parsePpCommand(l: str, style: sty.Styler, raw_html: str) -> str:
         pp_commands = []
 
         # Read in the new template
-        with open('templates/' + filename + '.rdtp') as f: pp_commands = f.readlines()
+        with open('templates/' + filename + '.rntp') as f: pp_commands = f.readlines()
 
         # Process the template
         for cmd in pp_commands: raw_html = parsePpCommand(cmd.strip(), style, raw_html)

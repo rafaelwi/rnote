@@ -1,4 +1,4 @@
-# Rnote Format Specifications
+# RNote Format Specifications
 This document is intended to explain the syntax of rnote and rdoc files. There 
 are three types of syntax: preprocessor commands, insert commands, and styling 
 commands. Preprocessor commands set the overall styling and appearance of the 
@@ -15,7 +15,8 @@ Sets the font and colors of the document. Users can choose between a predefined
 theme, or can create their own and place it in the `themes/` folder.
 
 **Options**<br>
-light [DEFAULT] - A default light theme, white background with black text.<br>
+simple [DEFAULT] - The default theme, white background with black text.<br>
+modern - A theme with sans-serif font. <br>
 dark - A dark document theme, black background with white text.<br>
 USERDEFINED - A user-defined theme. Must be placed in the `themes/` folder, and
 called with the theme name.
