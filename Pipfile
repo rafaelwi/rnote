@@ -16,6 +16,7 @@ xhtml2pdf = "==0.2.4"
 yattag = "==1.14.0"
 Pillow = "==7.2.0"
 PyPDF2 = "==1.26.0"
+flask = "*"
 
 [requires]
 python_version = "python3"
