@@ -1,6 +1,6 @@
-import randf_styling as sty
-import randf_generator as gen
-import cfg
+from src import styling as sty
+from src import generator as gen
+from src import cfg
 
 import re
 

@@ -1,4 +1,4 @@
-import randf_pagedimensions as pd
+from src import pagedimensions as pd
 import tinycss
 import os
 

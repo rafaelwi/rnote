@@ -1,5 +1,5 @@
-import randf_styling as sty
-import cfg
+from src import styling as sty
+from src import cfg
 
 import re
 

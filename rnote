@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 # RNote Processor
-import randf_cliargs as cliargs
-import randf_generator as gen
-import randf_parser as parser
-import randf_styling as sty
-import cfg
+from src import cliargs as cliargs
+from src import generator as gen
+from src import parser as parser
+from src import styling as sty
+from src import cfg
 
 import argparse
 import sys
