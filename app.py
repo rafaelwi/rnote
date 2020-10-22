@@ -5,7 +5,9 @@ app = Flask(__name__)
 # Page has to go into templates regardless of whether it actually uses the template features or not
 @app.route('/')
 def index():
-    return render_template('hi.html')
+    return render_template('index.html')
+
+
 
 # Displays the pdf
 # TODO: Accept an id to display the correct file to the correct user
@@ -23,4 +25,14 @@ def hello():
 @app.route('/user/<string:username>')
 def user(username):
     return 'User {}'.format(username)
+
+# This is how you do error handling
+# We need to pass in the error parameter in regardless
+# This part can stay, we just need to modify error.html
+# Look into wekzeug for error codes for insufficient storage
+@app.errorhandler(404)
+def error_404(error):
+    return render_template('error.html'), 404
+
+# Consider using user cookies or sessions to store things? Maybe that's too naughty
 
