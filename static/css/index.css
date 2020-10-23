@@ -38,15 +38,12 @@ h1 {
     }
 }
 
-/*@media screen and (min-width: 701px) {*/
 @media (pointer: fine) {
     .mobile-block {
         /*visibility: hidden;*/
         display: none;
         height: 0;
     }
-
-
 }
 
 .header {
@@ -75,7 +72,6 @@ h1 {
     font-weight: bold;
     font-family: Tahoma;
     text-align: center;
-
 }
 
 .main {

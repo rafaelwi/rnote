@@ -13,7 +13,8 @@ import os
 import time
 from xhtml2pdf import pisa
 
-if __name__ == '__main__':
+def run():
+    #TODO: Add paramters for filename and/or the text and an output name
     start_time = time.time()
     out_file = 'out.pdf'
 
@@ -72,7 +73,3 @@ if __name__ == '__main__':
     gen.convertHtmlToPdf(raw_html, style, out_file)
     print("[RNOTE] File {} successfully converted to PDF {}".format(args.input, out_file))
     print("[RNOTE] Process took {:.4f} seconds".format(time.time() - start_time))
-else:
-    print('Warning! RNote is not meant to be run as a module!')
-    print('Name: {}'.format(__name__))
-    sys.exit()
