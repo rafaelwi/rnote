@@ -1,8 +1,7 @@
-from flask import Flask, render_template, request, send_from_directory, redirect, url_for
+from flask import Flask, render_template, request, send_from_directory
 app = Flask(__name__)
 
 import uuid
-import imp
 import rnote_for_webapp as rnote
 
 DEFAULT_TEXT = """// Enter your note below and click 'compile' to generate it!
@@ -33,22 +32,22 @@ def index():
 # Displays the pdf
 @app.route('/out')
 def showIntroPDF():
-    return send_from_directory('', 'out.pdf')
+    return send_from_directory('', 'Welcome.pdf')
 
+
+# Displays the webapp's favicon
 @app.route('/favicon')
 def showFavicon():
     return send_from_directory('', 'favicon.ico')    
 
 
+# Display's user's PDF
 @app.route('/temp/<string:filename>')
 def displayNewPdf(filename):
     return send_from_directory('temp', filename)
 
 
-# This is how you do error handling
-# We need to pass in the error parameter in regardless
-# This part can stay, we just need to modify error.html
-# Look into wekzeug for error codes for insufficient storage
+# Error handler for 404
 @app.errorhandler(404)
 def error_404(error):
     return render_template('error.html'), 404

@@ -1,6 +1,8 @@
 __pycache__/
 a.html
-*.pdf
+test.pdf
+out.pdf
+temp/*.pdf
 *.randf
 *.rdoc
 *.rnote
