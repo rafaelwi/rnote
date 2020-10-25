@@ -20,9 +20,9 @@ class Styler:
             'b4': pd.PageDimensions(21.0, 29.7),
             'b5': pd.PageDimensions(14.8, 21.0),
             'b6': pd.PageDimensions(10.5, 14.8),
-            'elevenseventeen': pd.PageDimensions(21.59, 27.94),
+            'elevenseventeen': pd.PageDimensions(27.94, 43.1),
             'legal': pd.PageDimensions(21.59, 35.56),
-            'letter': pd.PageDimensions(27.94, 43.1)
+            'letter': pd.PageDimensions(21.59, 27.94)
         }
         self.theme = 'simple'
         self.margin = 'normal'

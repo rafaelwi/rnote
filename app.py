@@ -11,8 +11,6 @@ DEFAULT_TEXT = """// Enter your note below and click 'compile' to generate it!
 .pp margin normal
 .pp title My RNote Demo Note
 .pp align vert
-
-= Some test text
 """
 
 # Displays the homepage
@@ -34,8 +32,12 @@ def index():
 
 # Displays the pdf
 @app.route('/out')
-def peedeeeff():
+def showIntroPDF():
     return send_from_directory('', 'out.pdf')
+
+@app.route('/favicon')
+def showFavicon():
+    return send_from_directory('', 'favicon.ico')    
 
 
 @app.route('/temp/<string:filename>')
