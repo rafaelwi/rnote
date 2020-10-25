@@ -16,7 +16,6 @@ from xhtml2pdf import pisa
 def run(doc: str, out_file: str):
     # Generate the middle-man HTML, styler object, and parse. Then write to PDF
     doc = doc.split('\r\n')
-    print(doc)
     raw_html = gen.generateHtmlHeader()
     style = sty.Styler()
     raw_html = parser.parseRNoteDoc(doc, style, raw_html)
