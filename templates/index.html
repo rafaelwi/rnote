@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>RNote Demo</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+        <link rel='shortcut icon' type='image/x-icon' href="/favicon" />
+    </head>
+    <body>
+        <div class="header">
+            <h1 class="rnote-title">RNote</h1>
+            <div class="btn-row">
+                <button type="button" class="btn" onclick="window.open('https://github.com/rafaelwi/rnote', '_blank');">View on GitHub</button>
+                <button type="button" class="btn" onclick="window.open('https://github.com/rafaelwi/rnote/blob/master/spec.md', '_blank');">Help</button>
+                <button type="submit" class="btn" onclick="window.location.href=window.location.href">Reset</button>
+                <button type="submit" class="btn" form="code-form">Compile</button>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="inp">
+                <form action="{{ url_for('index') }}" method="post" id="code-form" name="code-form">
+                    <textarea id="code" name="code" placeholder="Enter your note" autofocus>{{ code }}</textarea>
+                </form>
+            </div>    
+            <div class="pdf-view">
+                <iframe class="pdf" src="{{ pdf_filename }}"></iframe>
+            </div>
+        </div>
+
+        <div class="mobile-block">
+            <h1>Sorry!</h1>
+            <p>The RNote demo is best experienced on a desktop or laptop</p>
+            <a href="https://github.com/rafaelwi/rnote">View the GitHub repo</a>
+            <br>
+            <a href="https://rafael.gg">Go to my website</a>
+        </div>
+    </body>
+</html>
