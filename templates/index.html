@@ -18,15 +18,7 @@
         <div class="main">
             <div class="inp">
                 <form action="{{ url_for('index') }}" method="post" id="code-form" name="code-form">
-                    <textarea id="code" name="code" placeholder="Enter your note" autofocus>// Enter your note below and click 'compile' to generate it!
-.pp theme modern
-.pp size letter
-.pp margin normal
-.pp title My RNote Demo Note
-.pp align vert
-= Some test text
-
-</textarea>
+                    <textarea id="code" name="code" placeholder="Enter your note" autofocus>{{ code }}</textarea>
                 </form>
             </div>    
             <div class="pdf-view">
