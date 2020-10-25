@@ -22,13 +22,14 @@ def index():
     if request.method == 'GET':
         return render_template('index.html', pdf_filename='./out', code=DEFAULT_TEXT)
 
-    # Get the "code" and generate a new filename with a UUID
-    code = request.form['code']
-    filename = 'temp/' + str(uuid.uuid4()) + '.pdf'
+    elif request.method == 'POST':
+        # Get the "code" and generate a new filename with a UUID
+        code = request.form['code']
+        filename = 'temp/' + str(uuid.uuid4()) + '.pdf'
 
-    # Send off the code and filename to be processed
-    rnote.run(code, filename)
-    return render_template('index.html', pdf_filename=filename, code=code)
+        # Send off the code and filename to be processed
+        rnote.run(code, filename)
+        return render_template('index.html', pdf_filename=filename, code=code)
 
 
 # Displays the pdf
