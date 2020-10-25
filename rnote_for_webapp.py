@@ -13,63 +13,11 @@ import os
 import time
 from xhtml2pdf import pisa
 
-def run():
-    #TODO: Add paramters for filename and/or the text and an output name
-    start_time = time.time()
-    out_file = 'out.pdf'
-
-    # Set up command line arguement parser
-    arg_parser = argparse.ArgumentParser()
-    cliargs.addArgs(arg_parser)
-    args = arg_parser.parse_args()
-
-    # Get the command line arguements
-    if args.about:
-        print('About information for RNote')
-        sys.exit()
-
-    if args.debug: 
-        print('== Debugging has been turned on ==')
-        cfg.DEBUG = cfg.VERBOSE = True
-    if args.verbose: 
-        print('== Verbosity has been turned on ==')
-        cfg.VERBOSE = True
-
-    if args.input: print("[RNOTE] Input file: " + args.input)
-    else:
-        print("[ERR!] No input document given, exiting...")
-        sys.exit(-1)
-
-    if args.output:
-        print("[RNOTE] Output file: " + args.output)
-        out_file = args.output
-    else: print("[WARN] No output document given, defaulting to 'out.pdf'")
-
-    # Check if the input file exists
-    if (os.path.exists(args.input) == False):
-        print("[ERR!] Input file does not exist, exiting...")
-        sys.exit(-2)
-
-    # Generate the middle-man HTML file that will be converted to PDF
-    if cfg.VERBOSE: print('[INFO] Generating middle-man file')
+def run(doc: str, out_file: str):
+    # Generate the middle-man HTML, styler object, and parse. Then write to PDF
+    doc = doc.split('\r\n')
+    print(doc)
     raw_html = gen.generateHtmlHeader()
-
-    # Read the file, then parse it
-    if cfg.VERBOSE: print('[INFO] Reading input file')
-    doc = [line.rstrip('\n') for line in open(args.input)]
     style = sty.Styler()
-    if cfg.VERBOSE: print('[INFO] Parsing input file')
     raw_html = parser.parseRNoteDoc(doc, style, raw_html)
-
-    # Write the html to a temp file
-    if cfg.DEBUG:
-        print('[DBUG] Writing middle-man file to a.html')
-        f = open("a.html", "w")
-        f.write(raw_html)
-        f.close()
-
-    # Write to PDF
-    if cfg.VERBOSE: print('[INFO] Writing to output file')
     gen.convertHtmlToPdf(raw_html, style, out_file)
-    print("[RNOTE] File {} successfully converted to PDF {}".format(args.input, out_file))
-    print("[RNOTE] Process took {:.4f} seconds".format(time.time() - start_time))

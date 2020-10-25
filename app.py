@@ -30,13 +30,13 @@ def user(username):
 
 @app.route('/render', methods=['POST'])
 def render():
-    # Generate a new UUID for the file and save file
-    filename = str(uuid.uuid4()) + '.temp'
-    print('Filename to save to: {}'.format(filename))
-    with open('temp/' + filename, 'w') as f: f.write(request.form['code'])
-    #TODO: Add paramters for filename and/or the text and an output name
-    #rnote.run()
-    return index()
+    # Get the "code" and generate a new filename with a UUID
+    code = request.form['code']
+    filename = 'temp/' + str(uuid.uuid4()) + '.pdf'
+
+    # Send off the code and filename to be processed
+    rnote.run(code, filename)
+    return render_template('index.html')
 
 # This is how you do error handling
 # We need to pass in the error parameter in regardless
