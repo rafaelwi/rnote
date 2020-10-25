@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory, redirect, url_for
 app = Flask(__name__)
 
 import uuid
@@ -11,6 +11,15 @@ import rnote_for_webapp as rnote
 def index(pdf_filename='./out'):
     print('Filename: {}'.format(pdf_filename))
     return render_template('index.html', pdf_filename=pdf_filename)
+
+@app.route('/', methods=['POST'])
+def indexRender():
+    code = request.form['code']
+    filename = 'temp/' + str(uuid.uuid4()) + '.pdf'
+
+    # Send off the code and filename to be processed
+    rnote.run(code, filename)
+    return index(filename)
 
 # Displays the pdf
 # TODO: Accept an id to display the correct file to the correct user
@@ -37,12 +46,13 @@ def render():
 
     # Send off the code and filename to be processed
     rnote.run(code, filename)
-    return index(filename)
+    index(filename)
+    #return render_template('index.html', pdf_filename=filename)
+    #return redirect(url_for('index'), pdf_filename=filename)
+
 
 @app.route('/temp/<string:filename>')
 def displayNewPdf(filename):
-    print('Executing displayNewPdf...')
-
     return send_from_directory('temp', filename)
 
 # This is how you do error handling
